@@ -1,0 +1,6 @@
+admin_password: ansible
+s3_state: "present"
+teardown: false
+workshop_type: ""
+valid_workshop_types:
+  - f5

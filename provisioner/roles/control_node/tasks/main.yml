@@ -1,0 +1,40 @@
+## This is needed for sshpass
+- name: Install EPEL
+  yum:
+    name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
+    state: present
+
+- name: Install base packages
+  yum:
+    name:
+      - vim
+      - git
+      - wget
+      - nano
+      - tree
+      - sshpass
+      - tmux
+      - python-pip
+      - ansible
+      # - https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.7.0-1.el7.ans.noarch.rpm
+    state: present
+  retries: 10
+  delay: 5
+
+- name: Install ansible.cfg and vimrc in home directory
+  template:
+    src: ansible.cfg.j2
+    dest: "/home/{{ username }}/.ansible.cfg"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+
+- name: Install vimrc in home directory
+  template:
+    src: vimrc.j2
+    dest: "/home/{{ username }}/.vimrc"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+
+- name: setup control node networking
+  include_tasks: "networking.yml"
+  when: workshop_type in ['networking', 'f5']

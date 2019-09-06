@@ -1,0 +1,32 @@
+---
+ec2_wait: yes
+ec2_subnet: "172.16.0.0/16"
+ssh_port: 22
+
+control_type: "centos-tower"
+webserver_type: "centos"
+
+# Additional info needed by AWS ec2 modules
+ec2_info:
+  centos-tower:
+    image_id: "ami-f4533694"
+    size: t2.medium
+    os_type: linux
+    disk_space: 20
+    architecture: x86_64
+    username: centos
+  centos:
+    image_id: "ami-f4533694"
+    size: t2.micro
+    os_type: linux
+    disk_space: 10
+    architecture: x86_64
+    filter: "Hard_RHEL8*"
+    username: centos
+  f5node:
+    image_id: "ami-8e21a1f6"
+    size: t2.large
+    os_type: linux
+    disk_space: 40
+    architecture: x86_64
+    username: admin

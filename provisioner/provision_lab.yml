@@ -1,0 +1,97 @@
+- name: Perform Checks to make sure this Playbook will complete successfully
+  hosts: localhost
+  connection: local
+  become: no
+  gather_facts: yes
+  tasks:
+    - name: Make sure we are running correct Ansible Version
+      assert:
+        that:
+          - ansible_version.major >= 2
+          - ansible_version.minor >= 8
+
+    - name: Make sure workshop_type is set to a correct value
+      assert:
+        that:
+          - workshop_type is defined
+          - workshop_type in valid_workshop_types
+        msg: "workshop_type must be defined and be one of: {{valid_workshop_types}}"
+
+    - name: Run role to check if local environment setup will work with AWS
+      include_role:
+        name: aws_check_setup
+
+# Create AWS infrastructure - VPC/Subnet/Route table etc.
+# Grab AMI for ansible control node (centos) and deploy EC2 instance
+# Grab AMI for webservers (centos) and deploy EC2 instance
+# Grab AMI for F5 and deploy EC2 instance
+- name: Create lab instances in AWS
+  hosts: localhost
+  connection: local
+  become: no
+  gather_facts: no
+  roles:
+    - manage_ec2_instances
+
+- name: Wait for all nodes to have SSH reachability
+  hosts: "managed_nodes:control_nodes"
+  become: yes
+  gather_facts: no
+  roles:
+    - connectivity_test
+
+- name: Configure common options on managed nodes and control nodes
+  hosts: "managed_nodes:control_nodes"
+  gather_facts: no
+  become: yes
+  roles:
+    - user_accounts
+    - common
+  tags: control_node
+
+# Install ansible and all the dependent packages
+# Install F5 ansible dependencies
+- name: Configure ansible control node
+  hosts: control_nodes
+  gather_facts: no
+  become: yes
+  roles:
+    - control_node
+  tags: control_node
+
+# Install httpd and create index.html file
+- name: Configure webservers - host1 and host2
+  hosts: lab_hosts
+  become: yes
+  gather_facts: no
+  roles:
+    - webservers
+
+# Set the initial password
+# Deploy AS3 RPM
+- name: Setup F5
+  hosts: f5
+  become: no
+  connection: local
+  gather_facts: no
+  roles:
+    - f5_setup
+
+- name: Print out information for instructor
+  hosts: localhost
+  connection: local
+  become: no
+  gather_facts: no
+  tasks:
+  - name: set facts for output
+    set_fact:
+     summary_information: |
+        PROVISIONER SUMMARY
+        *******************
+        - Workshop name => {{ec2_name_prefix}}
+        - Instructor inventor => {{playbook_dir}}/{{ec2_name_prefix}}/instructor_inventory.txt
+        - Private key => {{playbook_dir}}/{{ec2_name_prefix}}/{{ec2_name_prefix}}-private.pem
+
+  - name: Print Summary Information
+    debug:
+     msg: "{{summary_information}}"

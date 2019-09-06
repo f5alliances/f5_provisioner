@@ -1,0 +1,37 @@
+- name: Wait for BIG-IP to boot up completely
+  wait_for:
+    host: "{{ ansible_host }}"
+    port: 8443
+    state: present
+
+- name: Change BIG-IP F5 mgmt password
+  bigip_command:
+    provider:
+      ssh_keyfile: "{{playbook_dir}}/{{ec2_name_prefix}}/{{ec2_name_prefix}}-private.pem"
+      transport: cli
+      user: admin
+      server: "{{ ansible_host }}"
+    commands: "modify auth user admin password {{admin_password}}"
+
+- set_fact:
+     provider_info:
+      user: admin
+      password: "{{admin_password}}"
+      server: "{{ ansible_host }}"
+      server_port: "8443"
+      validate_certs: "False"
+
+- name: Wait for BIG-IP to boot up completely
+  bigip_wait:
+    provider: "{{provider_info}}"
+
+- name: Grab AS3 RPM from github
+  get_url:
+    url: https://github.com/F5Networks/f5-appsvcs-extension/blob/master/dist/latest/{{as3_rpm}}?raw=true
+    dest: "{{ playbook_dir }}/roles/f5_setup/files"
+
+# The bigip_iapplx_package requires rpm installed, on macOS use brew rather than pip or it won't work
+- name: Install AS3
+  bigip_iapplx_package:
+    package: "{{playbook_dir}}/roles/f5_setup/files/{{as3_rpm}}"
+    provider: "{{provider_info}}"

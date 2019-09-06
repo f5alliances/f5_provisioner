@@ -1,0 +1,60 @@
+---
+- name: GET F5 FACTS
+  hosts: f5
+  connection: local
+  gather_facts: no
+
+  vars:
+    default_pool: "/Common/http-pool"
+    vip_port: 8088
+
+  tasks:
+    - name: Collect information of all virtual servers
+      bigip_device_facts:
+        gather_subset:
+         - virtual-servers
+        server: "{{private_ip}}"
+        user: "{{ansible_user}}"
+        password: "{{ansible_ssh_pass}}"
+        server_port: 8443
+        validate_certs: no
+      register: facts_result
+
+    - name: Display the results
+      debug:
+        var: facts_result
+
+
+    - name: Display all VIP's available
+      debug: "msg={{item.name}}"
+      loop: "{{facts_result.virtual_servers}}"
+      loop_control:
+        label: "{{item.name}}"
+
+    - name: Display VIP's that has a specific destination port
+      debug: "msg={{item.name}}"
+      when: item.destination_port == vip_port
+      loop: "{{facts_result.virtual_servers}}"
+      loop_control:
+        label: 
+        - "{{item.name}}"
+        - "{{item.destination_port}}"
+
+    - name: Display VIP's that have a specific default pool
+      debug: "msg={{item.name}}"
+      when: item.default_pool == default_pool
+      loop: "{{facts_result.virtual_servers}}"
+      loop_control:
+        label:
+        - "{{item.name}}"
+        - "{{item.default_pool}}"
+
+    - name: Store the first vip name in a variable
+      set_fact:
+        first_vip_name: "{{facts_result.virtual_servers[0].name}}"
+      
+    - name: Display all profiles attached to a VIP "name={{first_vip_name}}"
+      debug: "msg={{item}}"
+      loop: "{{facts_result.virtual_servers | json_query(query_string)}}"
+      vars:
+       query_string: "[?name=='{{first_vip_name}}'].profiles[*].name"

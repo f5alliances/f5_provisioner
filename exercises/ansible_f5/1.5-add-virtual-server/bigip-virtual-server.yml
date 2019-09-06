@@ -1,0 +1,25 @@
+- name: BIG-IP SETUP
+  hosts: lb
+  connection: local
+  gather_facts: false
+
+  vars_files:
+   ../virtuals_pools.yml
+
+  tasks:
+
+  - name: ADD VIRTUAL SERVER
+    bigip_virtual_server:
+      server: "{{private_ip}}"
+      user: "{{ansible_user}}"
+      password: "{{ansible_ssh_pass}}"
+      server_port: "8443"
+      name: "{{item.vs_name}}"
+      destination: "{{private_ip}}"
+      port: "{{item.port}}"
+      enabled_vlans: "all"
+      all_profiles: ['http','clientssl','oneconnect']
+      pool: "{{item.pool_name}}"
+      snat: "Automap"
+      validate_certs: "no"
+    loop: "{{vips_pools}}"
