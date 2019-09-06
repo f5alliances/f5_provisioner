@@ -30,7 +30,7 @@
   - name: Store pool name in a variable
     set_fact:
      pool_name: "{{item.name}}"
-    loop: "{{bigip_facts.ltm_pools}}"
+    loop: "{{bigip_facts.ltm_pools[0]}}"
     no_log: true
 
   - name: "Show members belonging to pool {{pool_name}}"

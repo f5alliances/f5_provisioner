@@ -16,14 +16,17 @@
   - name: DELETE VIRTUAL SERVER
     bigip_virtual_server:
       provider: "{{provider}}"
-      name: "vip"
+      name: "{{item.vs_name}}"
       state: absent
+    loop: "{{vips_pools}}"
 
   - name: DELETE POOL
     bigip_pool:
       provider: "{{provider}}"
-      name: "http_pool"
+      name: "{{item.pool_name}}"
       state: absent
+    loop:
+      - "{{vips_pools}}"
 
   - name: DELETE NODES
     bigip_node:

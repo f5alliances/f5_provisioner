@@ -8,12 +8,17 @@
 
   tasks:
 
-  - name: ADD VIRTUAL SERVER
-    bigip_virtual_server:
+  - set_fact:
+     provider:
       server: "{{private_ip}}"
       user: "{{ansible_user}}"
       password: "{{ansible_ssh_pass}}"
-      server_port: "8443"
+      server_port: 8443
+      validate_certs: no
+        
+  - name: ADD VIRTUAL SERVER
+    bigip_virtual_server:
+      provider: "{{provider}}"
       name: "{{item.vs_name}}"
       destination: "{{private_ip}}"
       port: "{{item.port}}"
@@ -21,5 +26,4 @@
       all_profiles: ['http','clientssl','oneconnect']
       pool: "{{item.pool_name}}"
       snat: "Automap"
-      validate_certs: "no"
     loop: "{{vips_pools}}"

@@ -5,11 +5,15 @@
    
   tasks:
 
-  - name: SAVE RUNNING CONFIG ON BIG-IP
-    bigip_config:
+  - set_fact:
+     provider:
       server: "{{private_ip}}"
       user: "{{ansible_user}}"
       password: "{{ansible_ssh_pass}}"
-      server_port: "8443"
-      validate_certs: "no"
+      server_port: 8443
+      validate_certs: no
+      
+  - name: SAVE RUNNING CONFIG ON BIG-IP
+    bigip_config:
+      provider: "{{provider}}"
       save: yes
