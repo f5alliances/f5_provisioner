@@ -31,12 +31,13 @@
     path: /tmp/linklight
     state: absent
 
+# TO BE CHANGED TO REPO ONCE FINALIZED
 - name: Clone workshops repo (NETWORKING MODE)
   git:
     accept_hostkey: yes
     clone: yes
     dest: /tmp/workshops
-    repo: '{{ ansible_workshops_url | default("https://github.com/ansible/workshops.git") }}'
+    repo: '{{ ansible_workshops_url | default("https://github.com/payalsin/f5_sandbox.git") }}'
     version: '{{ ansible_workshops_version | default("master") }}'
     refspec: '{{ ansible_workshops_refspec | default("") }}'
     force: yes
