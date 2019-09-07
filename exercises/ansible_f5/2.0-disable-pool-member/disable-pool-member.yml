@@ -29,9 +29,7 @@
 
   - name: Store pool name in a variable
     set_fact:
-     pool_name: "{{item.name}}"
-    loop: "{{bigip_facts.ltm_pools[0]}}"
-    no_log: true
+     pool_name: "{{bigip_facts.ltm_pools[0].name}}"
 
   - name: "Show members belonging to pool {{pool_name}}"
     debug: "msg={{item}}"
@@ -63,5 +61,5 @@
       name: "{{member_name.user_input.split(':')[0]}}"
       pool: "{{pool_name}}"
       port: "{{member_name.user_input.split(':')[1]}}"
-      host: "{{hostvars[member_name.user_input.split(':')[0]].ansible_host}}
+      host: "{{hostvars[member_name.user_input.split(':')[0]].ansible_host}}"
     when: '"all" not in member_name.user_input'

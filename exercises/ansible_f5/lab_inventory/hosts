@@ -1,0 +1,14 @@
+[all:vars]
+ansible_user=student1
+ansible_ssh_pass=ansible
+ansible_port=22
+
+[lb]
+f5 ansible_host=34.217.149.19 ansible_user=admin private_ip=172.16.184.23 ansible_ssh_pass=ansible
+
+[control]
+ansible ansible_host=52.33.199.82 ansible_user=centos private_ip=172.16.98.213
+
+[webservers]
+host1 ansible_host=54.70.126.55 ansible_user=centos private_ip=172.16.185.74
+host2 ansible_host=54.185.166.193 ansible_user=centos private_ip=172.16.185.166

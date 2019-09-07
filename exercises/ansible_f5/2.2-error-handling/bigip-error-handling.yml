@@ -48,7 +48,7 @@
         - name: ADD VIRTUAL SERVER
           bigip_virtual_server:
             provider: "{{provider}}"
-            name: "vip"
+            name: "{{vip_name}}"
             destination: "{{private_ip}}"
             port: "443"
             enabled_vlans: "all"
@@ -61,13 +61,13 @@
         - name: DELETE VIRTUAL SERVER
           bigip_virtual_server:
             provider: "{{provider}}"
-            name: "{{test_vip_name}}"
+            name: "{{vip_name}}"
             state: absent
 
         - name: DELETE POOL
           bigip_pool:
             provider: "{{provider}}"
-            name: "{{test_http_pool}}"
+            name: "{{pool_name}}"
             state: absent
 
         - name: DELETE NODES

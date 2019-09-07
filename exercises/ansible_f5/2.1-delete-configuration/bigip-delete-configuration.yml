@@ -3,6 +3,9 @@
   connection: local
   gather_facts: false
 
+  vars_files:
+   ../virtuals_pools.yml
+
   tasks:
   - name: Setup provider
     set_fact:
@@ -25,8 +28,7 @@
       provider: "{{provider}}"
       name: "{{item.pool_name}}"
       state: absent
-    loop:
-      - "{{vips_pools}}"
+    loop: "{{vips_pools}}"
 
   - name: DELETE NODES
     bigip_node:
