@@ -1,0 +1,37 @@
+"web_app": {
+    "class": "Application",
+    "template": "http",
+    "serviceMain": {
+        "class": "Service_HTTP",
+        "virtualAddresses": [
+            "{{private_ip}}"
+        ],
+        "pool": "app_pool",
+				"policyWAF": {
+          "use": "new_asm_policy"
+         }
+    },
+    "app_pool": {
+        "class": "Pool",
+        "monitors": [
+            "http"
+        ],
+        "members": [
+            {
+                "servicePort": 80,
+                "serverAddresses": [
+                    {% set comma = joiner(",") %}
+                    {% for mem in pool_members %}
+                        {{comma()}} "{{  hostvars[mem]['ansible_host']  }}"
+                    {% endfor %}
+
+                ]
+            }
+        ]
+    },
+		"new_asm_policy": {
+		  "class": "WAF_Policy",
+		  "url": "https://raw.githubusercontent.com/payalsin/f5_sandbox/master/exercises/ansible_f5/3.3-as3-asm/Test_WAF_Policy.xml",
+			"ignoreChanges": true
+	 }
+}
