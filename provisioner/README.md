@@ -4,13 +4,10 @@
 - [Requirements](#requirements)
 - [Lab Setup](#lab-setup)
   - [One Time Setup](#one-time-setup)
-  - [Setup (per workshop)](#setup-per-workshop)
-  - [Accessing student documentation and slides](#Accessing-student-documentation-and-slides)
+  - [Accessing student documentation](#Accessing-student-documentation-and-slides)
 - [Lab Teardown](#aws-teardown)
 - [FAQ](../docs/faq.md)
 - [More info on what is happening](#more-info-on-what-is-happening)
-- [Remote Desktop](#remote-desktop)
-- [Getting Help](#getting-help)
 
 # Requirements
 - This provisioner must be run with Ansible Engine v2.8.0 or higher.
