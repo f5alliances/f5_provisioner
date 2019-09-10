@@ -3,10 +3,11 @@
 ec2_region: us-west-2
 
 # name prefix for all the VMs
-ec2_name_prefix: P3-TESTWORKSHOP
+ec2_name_prefix: TESTWORKSHOP
 
 # amount of work benches to provision
 student_total: 1
 
+# DO NOT CHANGE
 # workshp runs in F5 mode
 workshop_type: f5
