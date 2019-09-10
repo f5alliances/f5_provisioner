@@ -18,9 +18,21 @@
 ## One Time Setup
 [For One Time Setup - click here](../docs/setup.md)
 
-1. Change the f5_vars.yml to reflect the following
+1. Change the f5_vars.yml to reflect for your environment
 
-        
+        # region where the nodes will live
+        ec2_region: us-west-2
+
+        # name prefix for all the VMs
+        ec2_name_prefix: TESTWORKSHOP
+
+        # amount of work benches to provision
+        student_total: 1
+
+        #DO NOT CHANGE
+        # workshp runs in F5 mode
+        workshop_type: f5
+
 2. Run the playbook:
 
         ansible-playbook provision_lab.yml -e @f5_vars.yml
