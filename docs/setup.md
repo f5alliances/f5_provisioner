@@ -33,5 +33,5 @@ If you haven't done so already make sure you have the repo cloned to the machine
 6. Make sure you have subscribed to the right marketplace AMI (Amazon Machine Image)
 
   - F5 BIG-IP [Click here](https://aws.amazon.com/marketplace/pp/B079C4WR32)
-    - This will install `BEST <https://www.f5.com/pdf/licensing/good-better-best-licensing-overview.pdf`_ ' license of the BIG-IP. 
+    - This will install [BEST](https://www.f5.com/pdf/licensing/good-better-best-licensing-overview.pdf) license of the BIG-IP. 
 ```
