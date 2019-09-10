@@ -55,4 +55,12 @@ What does the AWS provisioner take care of automatically?
 - Creation of a subnet for the VPC
 - Creation of an internet gateway for the VPC
 - Creation of route table for VPC (for reachability from internet)
-fill out all required information.  Your issue will be closed if there if you skip required information in the Github issues template.
+
+What EC2 instances does it spin up?
+- One ansible control node using a Centos image
+- Two webservers using a Centos image
+- One BIG-IP using the BEST licesnse (pre-licensed)
+
+What tasks does it perfrom on the BIG-IP?
+- Changes the default MGMT password
+- Installs the AS3 RPM
