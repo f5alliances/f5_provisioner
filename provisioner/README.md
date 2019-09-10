@@ -1,4 +1,4 @@
-# Ansible AWS training provisioner
+# F5 Ansible AWS provisioner
 
 # Table Of Contents
 - [Requirements](#requirements)
