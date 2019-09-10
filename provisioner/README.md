@@ -18,13 +18,16 @@
 ## One Time Setup
 [For One Time Setup - click here](../docs/setup.md)
 
-1. Run the playbook:
+1. Change the f5_vars.yml to reflect the following
 
-        ansible-playbook provision_lab.yml -e @extra_vars.yml
+        
+2. Run the playbook:
 
-2. Login to the EC2 console and you should see instances being created like:
+        ansible-playbook provision_lab.yml -e @f5_vars.yml
 
-        `TESTWORKSHOP-student1-ansible`
+3. Login to the EC2 console and you should see instances being created like:
+
+        `TESTWORKSHOP-studentX-ansible`
 
 ## Accessing student documentation and slides
 
