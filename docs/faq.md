@@ -64,17 +64,6 @@ Install and/or upgrade boto3
 pip install boto3 --upgrade
 ```
 
-Are you using Tower?  Make sure to use umask
-https://docs.ansible.com/ansible-tower/latest/html/upgrade-migration-guide/virtualenv.html
-
-```
-[user@centos ~]$ sudo -i
-[root@centos ~]# source /var/lib/awx/venv/ansible/bin/activate
-[root@centos ~]# umask 0022
-[root@centos ~]# pip install --upgrade boto3
-[root@centos ~]# deactivate
-```
-
 ## Problem: AWS Signature Failure
 ```
     "error": {
@@ -86,46 +75,6 @@ https://docs.ansible.com/ansible-tower/latest/html/upgrade-migration-guide/virtu
 ### Solution
 
 Ensure the time on your Ansile Tower or Ansible Engine Server is correct.
-
-## Problem: Generic Tower Issue
-
-There is some issue that does not happen on the command line, but manifests itself via the Ansible Tower Web GUI.
-
-### Solution
-
-Red Hat Ansible Tower executes Ansible playbooks via the awx user.  SSH to the control node and become the awx user->
-
-```
-[user@centos ~]$ sudo su - awx
--bash-4.2$
-```
-
-Ansible Tower also takes advantage of a Python virtual environment (referred to as a virtualenv).  To mimic how Red Hat Ansible Tower executes playbooks you also must set the virtualenv
-
-```
--bash-4.2$ source /var/lib/awx/venv/ansible/bin/activate
-(ansible) -bash-4.2$
-```
-
-Ansible Tower stores job templates under the projects folder in the awx home directory, located at `/var/lib/awx/projects`
-
-```
-(ansible) -bash-4.2$ ls /var/lib/awx/projects
-```
-
-cd into the relevant project folder and execute the Playbook from the command line to run the playbook exactly how it was run from Ansible Tower.  This will hopefully let you see an error or problem you were not aware of via the Tower GUI.
-
-## Problem: Creating EC2 instances fail with an "OptInRequired" message
-
-```
-TASK [manage_ec2_instances : Create EC2 instances for rtr3 node (NETWORKING MODE)] ***
-fatal: [localhost]: FAILED! => changed=false 
-  msg: 'Instance creation failed => OptInRequired: In order to use this AWS Marketplace product you need to accept terms and subscribe. To do so please visit https://aws.amazon.com/marketplace/pp?sku=bw54e0gl17zf0vxq54dttwvow'
-
-```
-### Solution:
-
-This is likely if you are using the device (CSR/F5/vMX) for the first time in AWS. You will need to follow the link in the error output and accept the Terms and Conditions in order to proceed. Once you accept, re-run the provisioner.
 
 
 ## Problem: F5 Workshop provisioner fails on mac
