@@ -10,10 +10,11 @@
 
 - name: find ami for ansible control node
   ec2_ami_facts:
-   image_ids: "{{ ec2_info[control_type].image_id }}"
+   region: "{{ ec2_region }}"
+   filters:
+      name: "{{ ec2_info[control_type].filter }}"
+      architecture: "{{ ec2_info[control_type].architecture }}"
   register: amis
-
-- debug: msg="{{amis}}"
 
 - name: save ami for ansible control node
   set_fact:
