@@ -12,7 +12,7 @@
   ec2_ami_facts:
    region: "{{ ec2_region }}"
    filters:
-      name: "{{ ec2_info[control_type].filter }}"
+      name: "{{ ec2_info[control_type].name }}"
       architecture: "{{ ec2_info[control_type].architecture }}"
   register: amis
 
