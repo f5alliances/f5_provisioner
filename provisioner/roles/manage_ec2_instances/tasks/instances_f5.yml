@@ -1,7 +1,10 @@
 ##############f5 node##############
 - name: find ami for f5 (F5 MODE)
   ec2_ami_facts:
-    image_ids: "{{ ec2_info.f5node.image_id }}"
+   region: "{{ ec2_region }}"
+   filters:
+      name: "{{ ec2_info.f5node.name }}"
+      architecture: "{{ ec2_info.f5node.architecture }}"
   register: amis
 
 - name: save ami for f5 (F5 MODE)
@@ -47,7 +50,10 @@
 
 - name: find ami for host1 & host2 (F5 MODE)
   ec2_ami_facts:
-    image_ids: "{{ ec2_info[webserver_type].image_id }}"
+   region: "{{ ec2_region }}"
+   filters:
+      name: "{{ ec2_info[webserver_type].name }}"
+      architecture: "{{ ec2_info[webserver_type].architecture }}"
   register: amis
 
 - name: save ami for host1 & host2 (F5 MODE)
