@@ -61,7 +61,7 @@
         to_port: 8080
         from_port: 8080
         cidr_ip: 0.0.0.0/0
-       - proto: tcp
+      - proto: tcp
         to_port: 8081
         from_port: 8081
         cidr_ip: 0.0.0.0/0
