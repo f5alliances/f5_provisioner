@@ -5,6 +5,7 @@
    filters:
       name: "{{ ec2_info.f5node.name }}"
       architecture: "{{ ec2_info.f5node.architecture }}"
+      product-code: "{{ ec2_info.f5node.product_code }}"
   register: amis
 
 - name: save ami for f5 (F5 MODE)
