@@ -1,0 +1,22 @@
+- name: Download latest AS3 RPM
+  hosts: localhost
+  become: yes
+  connection: local
+  gather_facts: no
+
+  tasks:
+
+  - name: Get latest AS3 RPM version
+    action: shell wget -O - https://github.com/F5Networks/f5-appsvcs-extension/tree/master/dist/latest | grep noarch.rpm | cut -d\> -f 2 | sed -e 's!</a!!g'|sort -u |head -1 | cut -d " " -f 3 | cut -d "=" -f 2 | cut -d "\"" -f 2
+    register: as3_output
+
+  - debug: 
+     var: as3_output.stdout_lines[0]
+
+  - set_fact:
+     as3_rpm: "{{as3_output.stdout_lines[0]}}"
+
+  - name: Grab AS3 RPM from github
+    get_url:
+     url: https://github.com/F5Networks/f5-appsvcs-extension/blob/master/dist/latest/{{as3_rpm}}?raw=true
+     dest: "{{ playbook_dir }}/roles/f5_setup/files"

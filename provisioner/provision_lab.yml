@@ -67,8 +67,11 @@
   roles:
     - webservers
 
+# Get Latest AS3 version and download 
+- name: Latest AS3 version download
+  import_playbook: get_as3_rpm.yml
+
 # Set the initial password
-# Deploy AS3 RPM
 - name: Setup F5
   hosts: f5
   become: no
