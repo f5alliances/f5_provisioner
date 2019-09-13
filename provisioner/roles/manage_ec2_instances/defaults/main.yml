@@ -23,7 +23,8 @@ ec2_info:
     architecture: x86_64
     username: centos
   f5node:
-    name: "F5 Networks Prelicensed Hourly BIGIP-13.1.0.7-0.0.1 - Best 25MBPS *"    
+    name: "F5 Networks Prelicensed Hourly BIGIP-13.1*Best 25MBPS*"
+    product_code: "3ouya04g99e5euh4vbxtao1jz"
     size: t2.large
     os_type: linux
     disk_space: 40
