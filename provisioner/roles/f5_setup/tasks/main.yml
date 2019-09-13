@@ -24,8 +24,9 @@
 - name: Wait for BIG-IP to boot up completely
   bigip_wait:
     provider: "{{provider_info}}"
-
-- shell: ls {{ playbook_dir }}/roles/f5_setup/files
+    
+- name: Grab the AS3 version from the files directory
+  shell: ls -Art {{ playbook_dir }}/roles/f5_setup/files/*.rpm | tail -n 1 | rev | cut -d/ -f 1 | rev
   register: ls_output
 
 - set_fact:
