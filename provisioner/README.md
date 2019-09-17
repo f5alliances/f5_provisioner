@@ -37,6 +37,9 @@
 
         ansible-playbook provision_lab.yml -e @f5_vars.yml
 
+.. note::
+   If the provisioning is not successful, please teardown the lab using command `ansible-playbook teardown_lab.yml -e @f5_vars.yml` and then run the provision playbook again
+   
 3. Login to the EC2 console and you should see instances being created like:
 
         `TESTWORKSHOP-studentX-ansible`
@@ -53,7 +56,7 @@ To destroy all the EC2 instances after training is complete:
 
 1. Run the playbook:
 
-        ansible-playbook teardown_lab.yml -e @extra_vars.yml
+        ansible-playbook teardown_lab.yml -e @f5_vars.yml
 
 # FAQ
 
