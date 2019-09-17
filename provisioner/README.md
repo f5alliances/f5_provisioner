@@ -37,8 +37,11 @@
 
         ansible-playbook provision_lab.yml -e @f5_vars.yml
 
-.. note::
-   If the provisioning is not successful, please teardown the lab using command `ansible-playbook teardown_lab.yml -e @f5_vars.yml` and then run the provision playbook again
+NOTE::
+
+        If the provisioning is not successful, please teardown the lab using command 
+        `ansible-playbook teardown_lab.yml -e @f5_vars.yml` 
+        and then run the provision playbook again (Step 2)
    
 3. Login to the EC2 console and you should see instances being created like:
 
