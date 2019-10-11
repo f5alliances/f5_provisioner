@@ -33,7 +33,7 @@
    as3_rpm: "{{ls_output.stdout}}"
 
 # The bigip_iapplx_package requires rpm installed, on macOS use brew rather than pip or it won't work
-- name: Install AS3
-  bigip_iapplx_package:
-    package: "{{playbook_dir}}/roles/f5_setup/files/{{as3_rpm}}"
-    provider: "{{provider_info}}"
+#- name: Install AS3
+#  bigip_iapplx_package:
+#    package: "{{playbook_dir}}/roles/f5_setup/files/{{as3_rpm}}"
+#    provider: "{{provider_info}}"

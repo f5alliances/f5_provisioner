@@ -39,6 +39,7 @@
   gather_facts: no
   roles:
     - connectivity_test
+  tags: connectivity_test
 
 - name: Configure common options on managed nodes and control nodes
   hosts: "managed_nodes:control_nodes"
@@ -68,8 +69,8 @@
     - webservers
 
 # Get Latest AS3 version and download 
-- name: Latest AS3 version download
-  import_playbook: get_as3_rpm.yml
+#- name: Latest AS3 version download
+#  import_playbook: get_as3_rpm.yml
 
 # Set the initial password
 - name: Setup F5

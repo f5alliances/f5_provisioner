@@ -1,6 +1,6 @@
 - name: Download latest AS3 RPM
   hosts: localhost
-  become: yes
+#  become: yes
   connection: local
   gather_facts: no
 
@@ -20,3 +20,4 @@
     get_url:
      url: https://github.com/F5Networks/f5-appsvcs-extension/blob/master/dist/latest/{{as3_rpm}}?raw=true
      dest: "{{ playbook_dir }}/roles/f5_setup/files"
+     validate_certs: false
