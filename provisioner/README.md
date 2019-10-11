@@ -1,23 +1,69 @@
 # F5 Ansible AWS provisioner
 
 # Table Of Contents
+- [F5 Ansible AWS provisioner](#f5-ansible-aws-provisioner)
+- [Table Of Contents](#table-of-contents)
 - [Requirements](#requirements)
-- [Lab Setup](#lab-setup)
+- [Build Lab](#build-lab)
   - [One Time Setup](#one-time-setup)
-  - [Accessing student documentation](#Accessing-student-documentation-and-slides)
-- [Lab Teardown](#aws-teardown)
-- [FAQ](../docs/faq.md)
+    - [Tower Instructions](#tower-instructions)
+  - [Per workshop Setup](#per-workshop-setup)
+  - [Accessing student documentation and slides](#accessing-student-documentation-and-slides)
+- [Teardown Lab](#teardown-lab)
+- [FAQ](#faq)
 - [More info on what is happening](#more-info-on-what-is-happening)
 
 # Requirements
 - This provisioner must be run with Ansible Engine v2.8.0 or higher.
 - AWS Account (follow directions on one time setup below)
 
-# Lab Setup
+# Build Lab
 
 ## One Time Setup
-[For One Time Setup - click here](../docs/setup.md)
+1. Create an Amazon AWS account.
 
+2. Create an Access Key ID and Secret Access Key.  Save the ID and key for later.
+
+  - New to AWS and not sure what this step means?  [Click here](aws-directions/AWSHELP.md)
+
+3. Install `boto` and `boto3`as well as `netaddr` and `passlib`
+
+        pip install boto boto3 netaddr passlib
+
+  **Are you using Tower?**  [Tower Instructions](#tower-instructions)
+
+4. Set your Access Key ID and Secret Access Key from Step 2 under ~/.aws/credentials
+
+```
+[root@centos ~]# cat ~/.aws/credentials
+[default]
+aws_access_key_id = ABCDEFGHIJKLMNOP
+aws_secret_access_key = ABCDEFGHIJKLMNOP/ABCDEFGHIJKLMNOP
+```
+
+5. Clone the workshops repo:
+
+If you haven't done so already make sure you have the repo cloned to the machine executing the playbook
+
+        git clone https://github.com/ansible/workshops.git
+        cd workshops/provisioner
+
+6.  Make sure you have subscribed to the right marketplace AMI (Amazon Machine Image). You will need the F5 BIG-IP [Click here](https://aws.amazon.com/marketplace/pp/B079C44MFH/)
+
+### Tower Instructions
+
+Are you using Red Hat Ansible Tower to provision Ansible Automation Workshops? (e.g. is your control node Ansible Tower?)  Make sure to use umask for the installation of boto3 on the control node.
+https://docs.ansible.com/ansible-tower/latest/html/upgrade-migration-guide/virtualenv.html
+
+```
+[user@centos ~]$ sudo -i
+[root@centos ~]# source /var/lib/awx/venv/ansible/bin/activate
+[root@centos ~]# umask 0022
+[root@centos ~]# pip install --upgrade boto3
+[root@centos ~]# deactivate
+```
+
+## Per workshop Setup
 1. Change the f5_vars.yml to reflect for your environment
 
         # region where the nodes will live
@@ -51,7 +97,7 @@ NOTE::
 
   - Workbench information is stored in a local directory named after the workshop (e.g. TESTWORKSHOP/instructor_inventory)
 
-# Lab Teardown
+# Teardown Lab
 
 The `teardown_lab.yml` playbook deletes all the training instances as well as local inventory files.
 
