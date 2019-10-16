@@ -102,7 +102,7 @@ Now you can start to provision a Lab Environment in AWS.
 ## Access the Lab
 
 - Workbench information is stored in a local directory named after the workshop (e.g. TESTWORKSHOP1/instructor_inventory.txt) after the provisioner is run and is succesful. Example:
-   ```
+   ```handlebars
    [all:vars]
    ansible_port=22
 
