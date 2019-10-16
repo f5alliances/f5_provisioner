@@ -6,20 +6,34 @@
 - [Requirements](#requirements)
 - [Build Lab](#build-lab)
   - [One Time Setup](#one-time-setup)
-    - [Tower Instructions](#tower-instructions)
+    - [Install Ansible](#install-ansible)
+    - [AWS Setup](#aws-setup)
   - [Per workshop Setup](#per-workshop-setup)
-  - [Accessing student documentation and slides](#accessing-student-documentation-and-slides)
+  - [Access the Lab](#access-the-lab)
 - [Teardown Lab](#teardown-lab)
 - [FAQ](#faq)
 - [More info on what is happening](#more-info-on-what-is-happening)
 
 # Requirements
-- This provisioner must be run with Ansible Engine v2.8.0 or higher.
-- AWS Account (follow directions on one time setup below)
+- Ansible Engine v2.8.0 or higher.
+- AWS Account
 
 # Build Lab
 
 ## One Time Setup
+
+### Install Ansible
+1. Install Python
+Install the latest version of Python (2.7 minimum) if you do not already have it.
+- http://www.python.org/
+
+2. Install Ansible
+Then, install Ansible (v2.8.0 minimum):
+- http://docs.ansible.com/ansible/latest/intro_installation.html
+
+F5 recommends that you install Ansible by using virtualenv/pip. For an example, see [Install Ansible by using virtualenv](https://clouddocs.f5.com/products/orchestration/ansible/devel/usage/virtualenv.html).
+
+### AWS Setup
 1. Create an Amazon AWS account.
 
 2. Create an Access Key ID and Secret Access Key.  Save the ID and key for later.
@@ -30,11 +44,9 @@
 
         pip install boto boto3 netaddr passlib
 
-  **Are you using Tower?**  [Tower Instructions](#tower-instructions)
-
 4. Set your Access Key ID and Secret Access Key from Step 2 under ~/.aws/credentials
 
-```
+```shell
 [root@centos ~]# cat ~/.aws/credentials
 [default]
 aws_access_key_id = ABCDEFGHIJKLMNOP
@@ -44,68 +56,76 @@ aws_secret_access_key = ABCDEFGHIJKLMNOP/ABCDEFGHIJKLMNOP
 5. Clone the workshops repo:
 
 If you haven't done so already make sure you have the repo cloned to the machine executing the playbook
-
-        git clone https://github.com/ansible/workshops.git
+```bash
+        git clone https://github.com/f5alliances/f5_provisioner.git
         cd workshops/provisioner
+```
 
 6.  Make sure you have subscribed to the right marketplace AMI (Amazon Machine Image). You will need the F5 BIG-IP [Click here](https://aws.amazon.com/marketplace/pp/B079C44MFH/)
 
-### Tower Instructions
-
-Are you using Red Hat Ansible Tower to provision Ansible Automation Workshops? (e.g. is your control node Ansible Tower?)  Make sure to use umask for the installation of boto3 on the control node.
-https://docs.ansible.com/ansible-tower/latest/html/upgrade-migration-guide/virtualenv.html
-
-```
-[user@centos ~]$ sudo -i
-[root@centos ~]# source /var/lib/awx/venv/ansible/bin/activate
-[root@centos ~]# umask 0022
-[root@centos ~]# pip install --upgrade boto3
-[root@centos ~]# deactivate
-```
 
 ## Per workshop Setup
-1. Change the f5_vars.yml to reflect for your environment
 
+Now you can start to provision a Lab Environment in AWS.
+
+1. Confiure f5_vars.yml to reflect your environment under provisioning.
+  ```yaml
         # region where the nodes will live
         ec2_region: us-west-2
-
         # name prefix for all the VMs
-        ec2_name_prefix: TESTWORKSHOP
-
+        ec2_name_prefix: TESTWORKSHOP1
         # amount of work benches to provision
         student_total: 1
 
-        #DO NOT CHANGE
+        ## Optional Variables
+        # password used for student account on control node
+        admin_password: ansible
+
+        # DO NOT CHANGE
         # workshp runs in F5 mode
         workshop_type: f5
+  ```
 
 2. Run the playbook:
 
         ansible-playbook provision_lab.yml -e @f5_vars.yml
 
-NOTE::
-
-        If the provisioning is not successful, please teardown the lab using command 
-        `ansible-playbook teardown_lab.yml -e @f5_vars.yml` 
-        and then run the provision playbook again (Step 2)
+> :warning:**NOTE**: 
+> **If the provisioning is not successful**, please teardown the lab using command 
+> `ansible-playbook teardown_lab.yml -e @f5_vars.yml` 
+> and then run the provision playbook again (Step 2)
    
-3. Login to the EC2 console and you should see instances being created like:
+3. Login to the AWS EC2 console and you should see instances being created like:
 
-        `TESTWORKSHOP-studentX-ansible`
+        `TESTWORKSHOP1-studentX-ansible`
 
-## Accessing student documentation and slides
+## Access the Lab
 
-  - Workbench information is stored in a local directory named after the workshop (e.g. TESTWORKSHOP/instructor_inventory)
+- Workbench information is stored in a local directory named after the workshop (e.g. TESTWORKSHOP1/instructor_inventory.txt) after the provisioner is run and is succesful. Example:
+   ```
+   [all:vars]
+   ansible_port=22
+
+   [student1]
+   student1-ansible ansible_host=34.219.251.xxx ansible_user=centos 
+   student1-f5 ansible_host=52.39.228.xxx ansible_user=admin
+   student1-host1 ansible_host=52.43.153.xxx ansible_user=centos
+   student1-host2 ansible_host=34.215.176.xxx ansible_user=centos
+   ```
+   
+ - ssh to the ansible control node using studentx/ansible (x=studentID, example 1,2,3 etc.)
 
 # Teardown Lab
 
-The `teardown_lab.yml` playbook deletes all the training instances as well as local inventory files.
+The `teardown_lab.yml` playbook deletes all the sandbox instances as well as local inventory files.
 
 To destroy all the EC2 instances after training is complete:
 
 1. Run the playbook:
 
+```shell
         ansible-playbook teardown_lab.yml -e @f5_vars.yml
+```
 
 # FAQ
 
