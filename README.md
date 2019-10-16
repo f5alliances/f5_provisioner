@@ -8,7 +8,7 @@ F5 Automation Provisioner is built as an automation sandbox as a service, deploy
 
 ## So What?
 
-With F5 Automation provisioner, you will get a sandbox illustrated as below: 
+With F5 Automation provisioner, you are provided an AWS sandbox fully configured as below: 
 ![f5 diagram](images/f5topology.png)
 
 You can use it to:
