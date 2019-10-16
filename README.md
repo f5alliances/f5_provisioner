@@ -4,7 +4,7 @@
 F5 Automation Provisioner is built as an automation sandbox as a service, deployed in AWS, which can be used with F5 best practice templates for major use-cases​.
 
 ## How to use?
- Follow [AWS Lab Provisioner](provisioner) for detailed steps to spin up and tear down the automation sandbox.
+ Follow [F5 Ansible AWS Provisioner](provisioner) for detailed steps to spin up and tear down the automation sandbox.
 
 ## So What?
 
