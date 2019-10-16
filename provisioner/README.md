@@ -146,8 +146,7 @@ What does the AWS provisioner take care of automatically?
 What EC2 instances does it spin up?
 - One ansible control node using a Centos image
 - Two webservers using a Centos image
-- One BIG-IP using the BEST licesnse (pre-licensed)
+- One BIG-IP using the BEST license (pre-licensed)
 
 What tasks does it perfrom on the BIG-IP?
 - Changes the default MGMT password
-- Installs the AS3 RPM
