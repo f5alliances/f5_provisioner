@@ -3,22 +3,22 @@
 # Table Of Contents
 - [F5 Ansible AWS provisioner](#f5-ansible-aws-provisioner)
 - [Table Of Contents](#table-of-contents)
-- [Requirements](#requirements)
-- [Build Lab](#build-lab)
+- [PREREQUISITES](#prerequisites)
+- [BUILD LAB](#build-lab)
   - [One Time Setup](#one-time-setup)
     - [Install Ansible](#install-ansible)
     - [AWS Setup](#aws-setup)
   - [Per workshop Setup](#per-workshop-setup)
   - [Access the Lab](#access-the-lab)
-- [Teardown Lab](#teardown-lab)
+- [TEAR DOWN LAB](#tear-down-lab)
 - [FAQ](#faq)
 - [More info on what is happening](#more-info-on-what-is-happening)
 
-# Requirements
+# PREREQUISITES
 - Ansible Engine v2.8.0 or higher.
 - AWS Account
 
-# Build Lab
+# BUILD LAB
 
 ## One Time Setup
 
@@ -31,7 +31,7 @@ Install the latest version of Python (2.7 minimum) if you do not already have it
 Then, install Ansible (v2.8.0 minimum):
 - http://docs.ansible.com/ansible/latest/intro_installation.html
 
-F5 recommends that you install Ansible by using virtualenv/pip. For an example, see [Install Ansible by using virtualenv](https://clouddocs.f5.com/products/orchestration/ansible/devel/usage/virtualenv.html).
+If you run Ansible by using virtualenv/pip, please refer to [Install Ansible by using virtualenv](https://clouddocs.f5.com/products/orchestration/ansible/devel/usage/virtualenv.html).
 
 ### AWS Setup
 1. Create an Amazon AWS account.
@@ -115,7 +115,7 @@ Now you can start to provision a Lab Environment in AWS.
    
  - ssh to the ansible control node using studentx/ansible (x=studentID, example 1,2,3 etc.)
 
-# Teardown Lab
+# TEAR DOWN LAB
 
 The `teardown_lab.yml` playbook deletes all the sandbox instances as well as local inventory files.
 
