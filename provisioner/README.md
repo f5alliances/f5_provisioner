@@ -95,7 +95,7 @@ Now you can start to provision a Lab Environment in AWS.
 > `ansible-playbook teardown_lab.yml -e @f5_vars.yml` 
 > and then run the provision playbook again (Step 2)
    
-1. Login to the AWS EC2 console and you should see instances being created like:
+3. Login to the AWS EC2 console and you should see instances being created like:
 
         `TESTWORKSHOP1-studentX-ansible`
 
