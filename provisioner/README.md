@@ -16,7 +16,7 @@
 
 # PREREQUISITES
 - Ansible Engine v2.8.0 or higher.
-- AWS Account
+- An account on [AWS](https://aws.amazon.com/)
 
 # BUILD LAB
 
@@ -133,10 +133,10 @@ For frequently asked questions see the [FAQ](../docs/faq.md)
 
 # More info on what is happening
 
-The `provision_lab.yml` playbook creates a work bench for each student, configures them for password authentication, and creates an inventory file for each user with their IPs and credentials. An instructor inventory file is also created in the current directory which will let the instructor access the nodes of any student.  This file will be called `instructor_inventory.txt`
+The `provision_lab.yml` playbook creates a work bench for each student, configures them for password authentication, and creates an inventory file for each user with their IP's and credentials. An instructor inventory file is also created in the current directory which will let the instructor access the nodes of any student.  This file will be called `instructor_inventory.txt`
 
 What does the AWS provisioner take care of automatically?
-- AWS VPC creation (Amazon WebServices Virtual Private Cloud)
+- AWS VPC creation (Amazon Web Services Virtual Private Cloud)
 - Creation of an SSH key pair (stored at ./WORKSHOPNAME/WORKSHOPNAME-private.pem)
 - Creation of a AWS EC2 security group
 - Creation of a subnet for the VPC
