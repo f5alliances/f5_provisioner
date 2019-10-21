@@ -33,6 +33,16 @@ Then, install Ansible (v2.8.0 minimum):
 
 If you run Ansible by using virtualenv/pip, please refer to [Install Ansible by using virtualenv](https://clouddocs.f5.com/products/orchestration/ansible/devel/usage/virtualenv.html).
 
+```shell
+# ansible --version
+ansible 2.8.5
+  config file = None
+  configured module search path = ['/Users/zji/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /Users/zji/myansible/lib/python3.7/site-packages/ansible
+  executable location = /Users/zji/myansible/bin/ansible
+  python version = 3.7.3 (default, Jun 19 2019, 07:40:11) [Clang 9.0.0 (clang-900.0.39.2)]
+```
+
 ### AWS Setup
 1. Create an Amazon AWS account.
 
