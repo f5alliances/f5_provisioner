@@ -17,6 +17,7 @@
           - bigsuds
           - netaddr
           - jmespath
+          - lxml
         state: latest
   when: workshop_type == "f5"
 
