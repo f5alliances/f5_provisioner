@@ -71,7 +71,7 @@ aws_secret_access_key = ABCDEFGHIJKLMNOP/ABCDEFGHIJKLMNOP
 
 ```bash
         git clone https://github.com/f5alliances/f5_provisioner.git
-        cd workshops/provisioner
+        cd f5_provisioner/provisioner
 ```
 
 6.  Make sure you have subscribed to the right marketplace AMI (Amazon Machine Image). 
