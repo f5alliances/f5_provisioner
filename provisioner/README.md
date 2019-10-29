@@ -1,7 +1,7 @@
 # F5 Ansible AWS provisioner
 
 # Table Of Contents
-- [PREREQUISITES](#prerequisites)
+- [PRE-REQUISITES](#prerequisites)
 - [BUILD LAB](#build-lab)
   - [One Time Setup](#one-time-setup)
     - [Install Ansible](#install-ansible)
@@ -13,25 +13,23 @@
 - [FAQ](#faq)
 - [More info on what is happening](#more-info-on-what-is-happening)
 
-# PREREQUISITES
-This provisioner is run using Ansible on AWS. To run the provisioner you will need the following:
-- Server from where the provisioner will be executed installed with Ansible Engine v2.8.0 or higher. Let's give the server a name which we will refer in the rest of the document (ansible_server_provisioner)
+# PRE-REQUISITES
+This provisioner is run using Ansible on AWS. To run the provisioner you will need the following
+- Server from where the provisioner will be executed installed with Ansible Engine v2.8.0 or higher. Let's give the server a name which we will refer in the rest of the document (**ansible_server_provisioner**)
 - An account on [AWS](https://aws.amazon.com/)
 
 # BUILD LAB
 
 ## One Time Setup 
 
-Following needs to be installed on the ansible_server_provioner 
+Following needs to be installed on the **ansible_server_provioner**
 
 ### Install Ansible
-1. Install Python
-Install the latest version of Python (2.7 minimum) if you do not already have it.
-- http://www.python.org/
+1. Install Python - latest version of Python (2.7 minimum) if you do not already have it.
+   - http://www.python.org/
 
-2. Install Ansible
-Then, install Ansible (v2.8.0 minimum):
-- http://docs.ansible.com/ansible/latest/intro_installation.html
+2. Install Ansible version 2.8.0 minimum:
+   - http://docs.ansible.com/ansible/latest/intro_installation.html
 
 If you run Ansible by using virtualenv/pip, please refer to [Install Ansible by using virtualenv](https://clouddocs.f5.com/products/orchestration/ansible/devel/usage/virtualenv.html).
 
@@ -51,75 +49,71 @@ ansible 2.8.5
 1. Create an Amazon AWS account.
 
 2. Create an Access Key ID and Secret Access Key.  Save the ID and key for later.
+   - New to AWS and not sure what this step means?  [Click here](aws-directions/AWSHELP.md)
 
-  - New to AWS and not sure what this step means?  [Click here](aws-directions/AWSHELP.md)
+3. Install `boto` and `boto3`as well as `netaddr` and `passlib` on the **ansible_server_provisioner**
 
-3. Install `boto` and `boto3`as well as `netaddr` and `passlib` on the ansible_server_provisioner
+       pip install boto boto3 netaddr passlib
 
-        pip install boto boto3 netaddr passlib
+4. Set your Access Key ID and Secret Access Key from Step 2 under ~/.aws/credentials in the **ansible_server_provisioner**
 
-4. Set your Access Key ID and Secret Access Key from Step 2 under ~/.aws/credentials in the ansible_server_provisioner
-
-```shell
-[root@centos ~]# cat ~/.aws/credentials
-[default]
-aws_access_key_id = ABCDEFGHIJKLMNOP
-aws_secret_access_key = ABCDEFGHIJKLMNOP/ABCDEFGHIJKLMNOP
-```
+       [root@centos ~]# cat ~/.aws/credentials
+       [default]
+       aws_access_key_id = ABCDEFGHIJKLMNOP
+       aws_secret_access_key = ABCDEFGHIJKLMNOP/ABCDEFGHIJKLMNOP
 
 5. Clone the workshops repo on the ansible_server_provisioner
 
-```bash
-        git clone https://github.com/f5alliances/f5_provisioner.git
-        cd f5_provisioner/provisioner
-```
+       git clone https://github.com/f5alliances/f5_provisioner.git
+       cd f5_provisioner/provisioner
 
-6.  Make sure you have subscribed to the right marketplace AMI (Amazon Machine Image). 
-You will need the F5 BIG-IP [Click here](https://aws.amazon.com/marketplace/pp/B079C44MFH/)
+6. Make sure you have subscribed to the right marketplace AMI (Amazon Machine Image). 
+   - You will need the F5 BIG-IP [Click here](https://aws.amazon.com/marketplace/pp/B079C44MFH/)
 
 ## Per workshop Setup
 
 Now you can start to provision a Lab Environment in AWS.
 
 1. Configure f5_vars.yml to reflect your environment under provisioning.
-  ```yaml
-        # region where the nodes will live
-        ec2_region: us-west-2
-        # name prefix for all the VMs
-        ec2_name_prefix: TESTWORKSHOP1
-        # amount of work benches to provision
-        student_total: 1
 
-        ## Optional Variables
-        # password used for student account on control node
-        admin_password: ansible
+```yaml
+   # region where the nodes will live
+   ec2_region: us-west-2
+   # name prefix for all the VMs
+   ec2_name_prefix: TESTWORKSHOP1
+   # amount of work benches to provision
+   student_total: 1
 
-        # DO NOT CHANGE
-        # workshp runs in F5 mode
-        workshop_type: f5
-  ```
+   ## Optional Variables
+   # password used for student account on control node
+   admin_password: ansible
+
+   # DO NOT CHANGE
+   # workshp runs in F5 mode
+   workshop_type: f5
+```
 
 2. Run the playbook:
 
-        ansible-playbook provision_lab.yml -e @f5_vars.yml
+       ansible-playbook provision_lab.yml -e @f5_vars.yml
 
-> **NOTE**: 
-> :warning: 
-> **If the provisioning is not successful**, please teardown the lab using command 
-> `ansible-playbook teardown_lab.yml -e @f5_vars.yml` 
-> and then run the provision playbook again (Step 2)
-
-   
+**NOTE** :warning:
+    
+ **If the provisioning is not successful**, please teardown the lab using command 
+ `ansible-playbook teardown_lab.yml -e @f5_vars.yml` 
+  and then run the provision playbook again (Step 2)
+ 
 3. Login to the AWS EC2 console and you should see instances being created like:
 
         `TESTWORKSHOP1-studentX-ansible`
 
-> :warning: 
+**NOTE** :warning: 
+
 Remember to tear down the lab when not is use by following [TEAR DOWN LAB](#tear-down-lab), to avoid unexpected AWS charges!
 
 ## Access the Lab
 
-- Workbench information is stored in a local directory named after the workshop (e.g. TESTWORKSHOP1/instructor_inventory.txt) after the provisioner is run and is succesful. Example:
+Workbench information is stored in a local directory named after the workshop (e.g. TESTWORKSHOP1/instructor_inventory.txt) after the provisioner is run and is succesful. Example:
 
    ```handlebars
    [all:vars]
@@ -221,12 +215,14 @@ The BIG-IP input values are taken from the inventory file mentioned earlier
         var: device_facts['system_info']['product_version']
 ```
 5. Run the playbook - exit back into the command line of the control host and execute the following:
+
 ```bash
 [student1@ansible ~]$ ansible-playbook bigip-facts.yml
 ```
 
 6. The output will look as follows.
-```yaml
+
+```
 [student1@ansible ~]$ ansible-playbook bigip-facts.yml
 
 PLAY [GRAB F5 FACTS] 
@@ -287,7 +283,8 @@ ok: [f5] =>
         year: 2019
       uptime: 8196900.0
 
-TASK [DISPLAY ONLY THE MAC ADDRESS] ****************************************************************
+TASK [DISPLAY ONLY THE MAC ADDRESS] 
+****************************************************************
 ok: [f5] =>
   device_facts['system_info']['base_mac_address']: 02:f1:92:e9:a2:38
 
@@ -299,6 +296,7 @@ ok: [f5] =>
 PLAY RECAP 
 ****************************************************************
 f5                         : ok=4    changed=1    unreachable=0    failed=0
+
 ```
 
 Congratulations, your lab is up and running!
