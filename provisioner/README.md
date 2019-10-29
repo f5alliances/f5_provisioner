@@ -120,6 +120,7 @@ Remember to tear down the lab when not is use by following [TEAR DOWN LAB](#tear
 ## Access the Lab
 
 - Workbench information is stored in a local directory named after the workshop (e.g. TESTWORKSHOP1/instructor_inventory.txt) after the provisioner is run and is succesful. Example:
+
    ```handlebars
    [all:vars]
    ansible_port=22
@@ -134,7 +135,7 @@ Remember to tear down the lab when not is use by following [TEAR DOWN LAB](#tear
  - ssh to the ansible control node using studentx/ansible (x=studentID, example 1,2,3 etc.)
 
 ## Get Started with an exmaple
-1. Login to Ansible control node
+1. Login to Ansible control node using the studentID and the password mentioned in the f5_vars.yml earlier
 
 ```
 ssh student1@34.219.251.xxx
@@ -164,12 +165,12 @@ ansible 2.8.5
 The output will look as follows with student1 being the respective student workbench:
 ```
 [all:vars]
-ansible_user=student1
-ansible_ssh_pass=ansible
+ansible_user=studentx
+ansible_ssh_pass=<password_from_file>
 ansible_port=22
 
 [lb]
-f5 ansible_host=34.199.128.69 ansible_user=admin private_ip=172.16.26.136 ansible_ssh_pass=admin
+f5 ansible_host=34.199.128.69 ansible_user=admin private_ip=172.16.26.136 ansible_ssh_pass=<password_from_file>
 
 [control]
 ansible ansible_host=107.23.192.217 ansible_user=ec2-user private_ip=172.16.207.49
@@ -179,7 +180,9 @@ host1 ansible_host=107.22.141.4 ansible_user=ec2-user private_ip=172.16.170.190
 host2 ansible_host=54.146.162.192 ansible_user=ec2-user private_ip=172.16.160.13
 ```
 
-4. Using your text editor of choice create a new file called `bigip-facts.yml`.
+4. Using your text editor of choice create a new file called `bigip-facts.yml` in the home directory `/home/studentx`
+
+The BIG-IP input values are taken from the inventory file mentioned earlier
 
 ```yaml
 ---
@@ -189,17 +192,22 @@ host2 ansible_host=54.146.162.192 ansible_user=ec2-user private_ip=172.16.160.13
   gather_facts: no
 
   tasks:
-    - name: COLLECT BIG-IP FACTS
-      bigip_device_facts:
-        gather_subset:
-         - system-info
+    - name: Set a fact named 'provider' with BIG-IP login information
+      set_fact:
+       provider:
         server: "{{private_ip}}"
         user: "{{ansible_user}}"
         password: "{{ansible_ssh_pass}}"
         server_port: 8443
         validate_certs: no
-      register: device_facts
 
+    - name: COLLECT BIG-IP FACTS
+      bigip_device_facts:
+        provider: "{{provider}}"
+        gather_subset:
+         - system-info
+      register: device_facts
+      
     - name: DISPLAY COMPLETE BIG-IP SYSTEM INFORMATION
       debug:
         var: device_facts
@@ -221,34 +229,29 @@ host2 ansible_host=54.146.162.192 ansible_user=ec2-user private_ip=172.16.160.13
 ```yaml
 [student1@ansible ~]$ ansible-playbook bigip-facts.yml
 
-PLAY [GRAB F5 FACTS] ***********************************************************************************************************************************************************
+PLAY [GRAB F5 FACTS] 
+****************************************************************
+TASK [Set a fact named 'provider' with BIG-IP login information] 
+****************************************************************
+ok: [f5]
 
-TASK [COLLECT BIG-IP FACTS] ****************************************************************************************************************************************************
+TASK [COLLECT BIG-IP FACTS] 
+****************************************************************
 changed: [f5]
 
-TASK [DISPLAY COMPLETE BIG-IP SYSTEM INFORMATION] ******************************************************************************************************************************
+TASK [DISPLAY COMPLETE BIG-IP SYSTEM INFORMATION] 
+****************************************************************
+
 ok: [f5] =>
   device_facts:
+    ansible_facts:
+      discovered_interpreter_python: /usr/bin/python
     changed: true
-    deprecations:
-    - msg: Param 'server' is deprecated. See the module docs for more information
-      version: 2.9
-    - msg: Param 'user' is deprecated. See the module docs for more information
-      version: 2.9
-    - msg: Param 'server_port' is deprecated. See the module docs for more information
-      version: 2.9
-    - msg: Param 'password' is deprecated. See the module docs for more information
-      version: 2.9
-    - msg: Param 'validate_certs' is deprecated. See the module docs for more information
-      version: 2.9
     failed: false
+
     system_info:
       base_mac_address: 02:f1:92:e9:a2:38
-
-▽
       chassis_serial: 4eae2aec-f538-c80b-b48ce7466d8f
-
-▽
       hardware_information:
       - model: Intel(R) Xeon(R) CPU E5-2686 v4 @ 2.30GHz
         name: cpus
@@ -284,15 +287,17 @@ ok: [f5] =>
         year: 2019
       uptime: 8196900.0
 
-TASK [DISPLAY ONLY THE MAC ADDRESS] ********************************************************************************************************************************************
+TASK [DISPLAY ONLY THE MAC ADDRESS] ****************************************************************
 ok: [f5] =>
   device_facts['system_info']['base_mac_address']: 02:f1:92:e9:a2:38
 
-TASK [DISPLAY ONLY THE VERSION] ************************************************************************************************************************************************
+TASK [DISPLAY ONLY THE VERSION] 
+****************************************************************
 ok: [f5] =>
   device_facts['system_info']['product_version']: 13.1.0.7
 
-PLAY RECAP *********************************************************************************************************************************************************************
+PLAY RECAP 
+****************************************************************
 f5                         : ok=4    changed=1    unreachable=0    failed=0
 ```
 
