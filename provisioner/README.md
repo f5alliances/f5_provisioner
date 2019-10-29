@@ -1,8 +1,6 @@
 # F5 Ansible AWS provisioner
 
 # Table Of Contents
-- [F5 Ansible AWS provisioner](#f5-ansible-aws-provisioner)
-- [Table Of Contents](#table-of-contents)
 - [PREREQUISITES](#prerequisites)
 - [BUILD LAB](#build-lab)
   - [One Time Setup](#one-time-setup)
@@ -16,12 +14,15 @@
 - [More info on what is happening](#more-info-on-what-is-happening)
 
 # PREREQUISITES
-- Ansible Engine v2.8.0 or higher.
+This provisioner is run using Ansible on AWS. To run the provisioner you will need the following:
+- Server from where the provisioner will be executed installed with Ansible Engine v2.8.0 or higher. Let's give the server a name which we will refer in the rest of the document (ansible_server_provisioner)
 - An account on [AWS](https://aws.amazon.com/)
 
 # BUILD LAB
 
-## One Time Setup
+## One Time Setup 
+
+Following needs to be installed on the ansible_server_provioner 
 
 ### Install Ansible
 1. Install Python
@@ -34,13 +35,15 @@ Then, install Ansible (v2.8.0 minimum):
 
 If you run Ansible by using virtualenv/pip, please refer to [Install Ansible by using virtualenv](https://clouddocs.f5.com/products/orchestration/ansible/devel/usage/virtualenv.html).
 
+After installation run the following command to verify ansible installation
+
 ```shell
 # ansible --version
 ansible 2.8.5
   config file = None
-  configured module search path = ['/Users/zji/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
-  ansible python module location = /Users/zji/myansible/lib/python3.7/site-packages/ansible
-  executable location = /Users/zji/myansible/bin/ansible
+  configured module search path = ['/Users/test/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /Users/test/myansible/lib/python3.7/site-packages/ansible
+  executable location = /Users/test/myansible/bin/ansible
   python version = 3.7.3 (default, Jun 19 2019, 07:40:11) [Clang 9.0.0 (clang-900.0.39.2)]
 ```
 
@@ -51,11 +54,11 @@ ansible 2.8.5
 
   - New to AWS and not sure what this step means?  [Click here](aws-directions/AWSHELP.md)
 
-3. Install `boto` and `boto3`as well as `netaddr` and `passlib`
+3. Install `boto` and `boto3`as well as `netaddr` and `passlib` on the ansible_server_provisioner
 
         pip install boto boto3 netaddr passlib
 
-4. Set your Access Key ID and Secret Access Key from Step 2 under ~/.aws/credentials
+4. Set your Access Key ID and Secret Access Key from Step 2 under ~/.aws/credentials in the ansible_server_provisioner
 
 ```shell
 [root@centos ~]# cat ~/.aws/credentials
@@ -64,22 +67,21 @@ aws_access_key_id = ABCDEFGHIJKLMNOP
 aws_secret_access_key = ABCDEFGHIJKLMNOP/ABCDEFGHIJKLMNOP
 ```
 
-5. Clone the workshops repo:
+5. Clone the workshops repo on the ansible_server_provisioner
 
-If you haven't done so already make sure you have the repo cloned to the machine executing the playbook
 ```bash
         git clone https://github.com/f5alliances/f5_provisioner.git
         cd workshops/provisioner
 ```
 
-6.  Make sure you have subscribed to the right marketplace AMI (Amazon Machine Image). You will need the F5 BIG-IP [Click here](https://aws.amazon.com/marketplace/pp/B079C44MFH/)
-
+6.  Make sure you have subscribed to the right marketplace AMI (Amazon Machine Image). 
+You will need the F5 BIG-IP [Click here](https://aws.amazon.com/marketplace/pp/B079C44MFH/)
 
 ## Per workshop Setup
 
 Now you can start to provision a Lab Environment in AWS.
 
-1. Confiure f5_vars.yml to reflect your environment under provisioning.
+1. Configure f5_vars.yml to reflect your environment under provisioning.
   ```yaml
         # region where the nodes will live
         ec2_region: us-west-2
@@ -113,7 +115,7 @@ Now you can start to provision a Lab Environment in AWS.
         `TESTWORKSHOP1-studentX-ansible`
 
 > :warning: 
-Remember to tear down the lab by following [TEAR DOWN LAB](#tear-down-lab), to avoid unexpected AWS charges!
+Remember to tear down the lab when not is use by following [TEAR DOWN LAB](#tear-down-lab), to avoid unexpected AWS charges!
 
 ## Access the Lab
 
@@ -132,7 +134,7 @@ Remember to tear down the lab by following [TEAR DOWN LAB](#tear-down-lab), to a
  - ssh to the ansible control node using studentx/ansible (x=studentID, example 1,2,3 etc.)
 
 ## Get Started with an exmaple
-1. login to Ansible control node
+1. Login to Ansible control node
 
 ```
 ssh student1@34.219.251.xxx
@@ -152,6 +154,7 @@ ansible 2.8.5
   executable location = /usr/bin/ansible
   python version = 2.7.5 (default, Oct 30 2018, 23:45:53) [GCC 4.8.5 20150623 (Red Hat 4.8.5-36)]
 ```
+
 3. Use the cat command to view the contents of your inventory
 
 ```
@@ -177,6 +180,7 @@ host2 ansible_host=54.146.162.192 ansible_user=ec2-user private_ip=172.16.160.13
 ```
 
 4. Using your text editor of choice create a new file called `bigip-facts.yml`.
+
 ```yaml
 ---
 - name: GRAB F5 FACTS
