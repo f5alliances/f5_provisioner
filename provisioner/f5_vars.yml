@@ -2,7 +2,7 @@
 # region where the nodes will live
 ec2_region: us-west-2
 # name prefix for all the VMs
-ec2_name_prefix: TESTWORKSHOP1
+ec2_name_prefix: TESTWORKSHOP2
 # amount of work benches to provision
 student_total: 1
 
