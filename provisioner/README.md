@@ -113,6 +113,8 @@ Now you can start to provision a Lab Environment in AWS.
 
 Remember to tear down the lab when not is use by following [TEAR DOWN LAB](#tear-down-lab), to avoid unexpected AWS charges!
 
+![Provisioner](../images/provisioner.gif)
+
 ## Access the Lab
 
 Workbench information is stored in a local directory named after the workshop (e.g. TESTWORKSHOP1/instructor_inventory.txt) after the provisioner is run and is succesful. Example:
