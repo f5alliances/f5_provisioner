@@ -3,7 +3,7 @@
 # Table Of Contents
 - [F5 Ansible AWS provisioner](#f5-ansible-aws-provisioner)
 - [Table Of Contents](#table-of-contents)
-- [PREREQUISITES](#prerequisites)
+- [PRE-REQUISITES](#pre-requisites)
 - [BUILD LAB](#build-lab)
   - [One Time Setup](#one-time-setup)
     - [Install Ansible](#install-ansible)
@@ -15,32 +15,35 @@
 - [FAQ](#faq)
 - [More info on what is happening](#more-info-on-what-is-happening)
 
-# PREREQUISITES
-- Ansible Engine v2.8.0 or higher.
+# PRE-REQUISITES
+This provisioner is run using Ansible on AWS. To run the provisioner you will need the following
+- Server from where the provisioner will be executed installed with Ansible Engine v2.8.0 or higher. Let's give the server a name which we will refer in the rest of the document (**ansible_server_provisioner**)
 - An account on [AWS](https://aws.amazon.com/)
 
 # BUILD LAB
 
-## One Time Setup
+## One Time Setup 
+
+Following needs to be installed on the **ansible_server_provioner**
 
 ### Install Ansible
-1. Install Python
-Install the latest version of Python (2.7 minimum) if you do not already have it.
-- http://www.python.org/
+1. Install Python - latest version of Python (2.7 minimum) if you do not already have it.
+   - http://www.python.org/
 
-2. Install Ansible
-Then, install Ansible (v2.8.0 minimum):
-- http://docs.ansible.com/ansible/latest/intro_installation.html
+2. Install Ansible version 2.8.0 minimum:
+   - http://docs.ansible.com/ansible/latest/intro_installation.html
 
 If you run Ansible by using virtualenv/pip, please refer to [Install Ansible by using virtualenv](https://clouddocs.f5.com/products/orchestration/ansible/devel/usage/virtualenv.html).
+
+After installation run the following command to verify ansible installation
 
 ```shell
 # ansible --version
 ansible 2.8.5
   config file = None
-  configured module search path = ['/Users/zji/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
-  ansible python module location = /Users/zji/myansible/lib/python3.7/site-packages/ansible
-  executable location = /Users/zji/myansible/bin/ansible
+  configured module search path = ['/Users/test/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /Users/test/myansible/lib/python3.7/site-packages/ansible
+  executable location = /Users/test/myansible/bin/ansible
   python version = 3.7.3 (default, Jun 19 2019, 07:40:11) [Clang 9.0.0 (clang-900.0.39.2)]
 ```
 
@@ -48,76 +51,72 @@ ansible 2.8.5
 1. Create an Amazon AWS account.
 
 2. Create an Access Key ID and Secret Access Key.  Save the ID and key for later.
+   - New to AWS and not sure what this step means?  [Click here](aws-directions/AWSHELP.md)
 
-  - New to AWS and not sure what this step means?  [Click here](aws-directions/AWSHELP.md)
+3. Install `boto` and `boto3`as well as `netaddr` and `passlib` on the **ansible_server_provisioner**
 
-3. Install `boto` and `boto3`as well as `netaddr` and `passlib`
+       pip install boto boto3 netaddr passlib
 
-        pip install boto boto3 netaddr passlib
+4. Set your Access Key ID and Secret Access Key from Step 2 under ~/.aws/credentials in the **ansible_server_provisioner**
 
-4. Set your Access Key ID and Secret Access Key from Step 2 under ~/.aws/credentials
+       [root@centos ~]# cat ~/.aws/credentials
+       [default]
+       aws_access_key_id = ABCDEFGHIJKLMNOP
+       aws_secret_access_key = ABCDEFGHIJKLMNOP/ABCDEFGHIJKLMNOP
 
-```shell
-[root@centos ~]# cat ~/.aws/credentials
-[default]
-aws_access_key_id = ABCDEFGHIJKLMNOP
-aws_secret_access_key = ABCDEFGHIJKLMNOP/ABCDEFGHIJKLMNOP
-```
+5. Clone the workshops repo on the ansible_server_provisioner
 
-5. Clone the workshops repo:
+       git clone https://github.com/f5alliances/f5_provisioner.git
+       cd f5_provisioner/provisioner
 
-If you haven't done so already make sure you have the repo cloned to the machine executing the playbook
-```bash
-        git clone https://github.com/f5alliances/f5_provisioner.git
-        cd workshops/provisioner
-```
-
-6.  Make sure you have subscribed to the right marketplace AMI (Amazon Machine Image). You will need the F5 BIG-IP [Click here](https://aws.amazon.com/marketplace/pp/B079C44MFH/)
-
+6. Make sure you have subscribed to the right marketplace AMI (Amazon Machine Image). 
+   - You will need the F5 BIG-IP [Click here](https://aws.amazon.com/marketplace/pp/B079C44MFH/)
 
 ## Per workshop Setup
 
 Now you can start to provision a Lab Environment in AWS.
 
-1. Confiure f5_vars.yml to reflect your environment under provisioning.
-  ```yaml
-        # region where the nodes will live
-        ec2_region: us-west-2
-        # name prefix for all the VMs
-        ec2_name_prefix: TESTWORKSHOP1
-        # amount of work benches to provision
-        student_total: 1
+1. Configure f5_vars.yml to reflect your environment under provisioning.
 
-        ## Optional Variables
-        # password used for student account on control node
-        admin_password: ansible
+```yaml
+   # region where the nodes will live
+   ec2_region: us-west-2
+   # name prefix for all the VMs
+   ec2_name_prefix: TESTWORKSHOP1
+   # amount of work benches to provision
+   student_total: 1
 
-        # DO NOT CHANGE
-        # workshp runs in F5 mode
-        workshop_type: f5
-  ```
+   ## Optional Variables
+   # password used for student account on control node
+   admin_password: ansible
+
+   # DO NOT CHANGE
+   # workshp runs in F5 mode
+   workshop_type: f5
+```
 
 2. Run the playbook:
 
-        ansible-playbook provision_lab.yml -e @f5_vars.yml
+       ansible-playbook provision_lab.yml -e @f5_vars.yml
 
-> **NOTE**: 
-> :warning: 
-> **If the provisioning is not successful**, please teardown the lab using command 
-> `ansible-playbook teardown_lab.yml -e @f5_vars.yml` 
-> and then run the provision playbook again (Step 2)
-
-   
+**NOTE** :warning:
+    
+ **If the provisioning is not successful**, please teardown the lab using command 
+ `ansible-playbook teardown_lab.yml -e @f5_vars.yml` 
+  and then run the provision playbook again (Step 2)
+ 
 3. Login to the AWS EC2 console and you should see instances being created like:
 
         `TESTWORKSHOP1-studentX-ansible`
 
-> :warning: 
-Remember to tear down the lab by following [TEAR DOWN LAB](#tear-down-lab), to avoid unexpected AWS charges!
+**NOTE** :warning: 
+
+Remember to tear down the lab when not is use by following [TEAR DOWN LAB](#tear-down-lab), to avoid unexpected AWS charges!
 
 ## Access the Lab
 
-- Workbench information is stored in a local directory named after the workshop (e.g. TESTWORKSHOP1/instructor_inventory.txt) after the provisioner is run and is succesful. Example:
+Workbench information is stored in a local directory named after the workshop (e.g. TESTWORKSHOP1/instructor_inventory.txt) after the provisioner is run and is succesful. Example:
+
    ```handlebars
    [all:vars]
    ansible_port=22
@@ -132,7 +131,7 @@ Remember to tear down the lab by following [TEAR DOWN LAB](#tear-down-lab), to a
  - ssh to the ansible control node using studentx/ansible (x=studentID, example 1,2,3 etc.)
 
 ## Get Started with an exmaple
-1. login to Ansible control node
+1. Login to Ansible control node using the studentID and the password mentioned in the f5_vars.yml earlier
 
 ```
 ssh student1@34.219.251.xxx
@@ -152,6 +151,7 @@ ansible 2.8.5
   executable location = /usr/bin/ansible
   python version = 2.7.5 (default, Oct 30 2018, 23:45:53) [GCC 4.8.5 20150623 (Red Hat 4.8.5-36)]
 ```
+
 3. Use the cat command to view the contents of your inventory
 
 ```
@@ -161,12 +161,12 @@ ansible 2.8.5
 The output will look as follows with student1 being the respective student workbench:
 ```
 [all:vars]
-ansible_user=student1
-ansible_ssh_pass=ansible
+ansible_user=studentx
+ansible_ssh_pass=<password_from_file>
 ansible_port=22
 
 [lb]
-f5 ansible_host=34.199.128.69 ansible_user=admin private_ip=172.16.26.136 ansible_ssh_pass=admin
+f5 ansible_host=34.199.128.69 ansible_user=admin private_ip=172.16.26.136 ansible_ssh_pass=<password_from_file>
 
 [control]
 ansible ansible_host=107.23.192.217 ansible_user=ec2-user private_ip=172.16.207.49
@@ -176,7 +176,10 @@ host1 ansible_host=107.22.141.4 ansible_user=ec2-user private_ip=172.16.170.190
 host2 ansible_host=54.146.162.192 ansible_user=ec2-user private_ip=172.16.160.13
 ```
 
-4. Using your text editor of choice create a new file called `bigip-facts.yml`.
+4. Using your text editor of choice create a new file called `bigip-facts.yml` in the home directory `/home/studentx`
+
+The BIG-IP input values are taken from the inventory file mentioned earlier
+
 ```yaml
 ---
 - name: GRAB F5 FACTS
@@ -185,17 +188,22 @@ host2 ansible_host=54.146.162.192 ansible_user=ec2-user private_ip=172.16.160.13
   gather_facts: no
 
   tasks:
-    - name: COLLECT BIG-IP FACTS
-      bigip_device_facts:
-        gather_subset:
-         - system-info
+    - name: Set a fact named 'provider' with BIG-IP login information
+      set_fact:
+       provider:
         server: "{{private_ip}}"
         user: "{{ansible_user}}"
         password: "{{ansible_ssh_pass}}"
         server_port: 8443
         validate_certs: no
-      register: device_facts
 
+    - name: COLLECT BIG-IP FACTS
+      bigip_device_facts:
+        provider: "{{provider}}"
+        gather_subset:
+         - system-info
+      register: device_facts
+      
     - name: DISPLAY COMPLETE BIG-IP SYSTEM INFORMATION
       debug:
         var: device_facts
@@ -209,42 +217,39 @@ host2 ansible_host=54.146.162.192 ansible_user=ec2-user private_ip=172.16.160.13
         var: device_facts['system_info']['product_version']
 ```
 5. Run the playbook - exit back into the command line of the control host and execute the following:
+
 ```bash
 [student1@ansible ~]$ ansible-playbook bigip-facts.yml
 ```
 
 6. The output will look as follows.
-```yaml
+
+```
 [student1@ansible ~]$ ansible-playbook bigip-facts.yml
 
-PLAY [GRAB F5 FACTS] ***********************************************************************************************************************************************************
+PLAY [GRAB F5 FACTS] 
+****************************************************************
+TASK [Set a fact named 'provider' with BIG-IP login information] 
+****************************************************************
+ok: [f5]
 
-TASK [COLLECT BIG-IP FACTS] ****************************************************************************************************************************************************
+TASK [COLLECT BIG-IP FACTS] 
+****************************************************************
 changed: [f5]
 
-TASK [DISPLAY COMPLETE BIG-IP SYSTEM INFORMATION] ******************************************************************************************************************************
+TASK [DISPLAY COMPLETE BIG-IP SYSTEM INFORMATION] 
+****************************************************************
+
 ok: [f5] =>
   device_facts:
+    ansible_facts:
+      discovered_interpreter_python: /usr/bin/python
     changed: true
-    deprecations:
-    - msg: Param 'server' is deprecated. See the module docs for more information
-      version: 2.9
-    - msg: Param 'user' is deprecated. See the module docs for more information
-      version: 2.9
-    - msg: Param 'server_port' is deprecated. See the module docs for more information
-      version: 2.9
-    - msg: Param 'password' is deprecated. See the module docs for more information
-      version: 2.9
-    - msg: Param 'validate_certs' is deprecated. See the module docs for more information
-      version: 2.9
     failed: false
+
     system_info:
       base_mac_address: 02:f1:92:e9:a2:38
-
-▽
       chassis_serial: 4eae2aec-f538-c80b-b48ce7466d8f
-
-▽
       hardware_information:
       - model: Intel(R) Xeon(R) CPU E5-2686 v4 @ 2.30GHz
         name: cpus
@@ -280,16 +285,20 @@ ok: [f5] =>
         year: 2019
       uptime: 8196900.0
 
-TASK [DISPLAY ONLY THE MAC ADDRESS] ********************************************************************************************************************************************
+TASK [DISPLAY ONLY THE MAC ADDRESS] 
+****************************************************************
 ok: [f5] =>
   device_facts['system_info']['base_mac_address']: 02:f1:92:e9:a2:38
 
-TASK [DISPLAY ONLY THE VERSION] ************************************************************************************************************************************************
+TASK [DISPLAY ONLY THE VERSION] 
+****************************************************************
 ok: [f5] =>
   device_facts['system_info']['product_version']: 13.1.0.7
 
-PLAY RECAP *********************************************************************************************************************************************************************
+PLAY RECAP 
+****************************************************************
 f5                         : ok=4    changed=1    unreachable=0    failed=0
+
 ```
 
 Congratulations, your lab is up and running!
