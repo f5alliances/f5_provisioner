@@ -112,7 +112,8 @@ Now you can start to provision a Lab Environment in AWS.
 
         `TESTWORKSHOP1-studentX-ansible`
 
-[Provisioner](../images/provisioner.gif)
+![Provisioner](../images/provisioner.gif)
+
 > :warning: 
 Remember to tear down the lab by following [TEAR DOWN LAB](#tear-down-lab), to avoid unexpected AWS charges!
 
