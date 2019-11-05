@@ -51,7 +51,7 @@ ansible 2.8.5
 1. Create an Amazon AWS account.
 
 2. Create an Access Key ID and Secret Access Key.  Save the ID and key for later.
-   - New to AWS and not sure what this step means?  [Click here](aws-directions/AWSHELP.md)
+   - New to AWS and not sure what this step means?  [Click here](../docs/aws-directions/AWSHELP.md)
 
 3. Install `boto` and `boto3`as well as `netaddr` and `passlib` on the **ansible_server_provisioner**
 
