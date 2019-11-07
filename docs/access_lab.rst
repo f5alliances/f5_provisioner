@@ -1,13 +1,18 @@
 Access the Lab
 ==============
 
-Workbench information is stored in a local directory named after the workshop (e.g. TESTWORKSHOP1/instructor_inventory.txt) after the
+Once the provisioner has run successfully and infrasture has been spun up.
+
+All the workbench information is stored in a local directory named after the workshop (e.g. TESTWORKSHOP1/instructor_inventory.txt) after the
 provisioner is run and is succesful. 
 
 Example:
 
 .. code::
 
+   cd f5_provisioner/provisioner
+   cat TESTWORKSHOP1/instructor_inventory.txt
+   
    [all:vars]
    ansible_port=22
 
@@ -17,9 +22,12 @@ Example:
    student1-host1 ansible_host=52.43.153.xxx ansible_user=centos    #Backend application server1
    student1-host2 ansible_host=34.215.176.xxx ansible_user=centos   #Backend application server2
 
+.. note::
 
-Get Started with an exmaple
----------------------------
+   If there are more students configured there will be more entries to represent each student
+   
+Get Started 
+-----------
 
 1. Login to Ansible control node (IP from inventory file above) using the studentID and the password
    mentioned in the f5_vars.yml earlier
@@ -70,12 +78,12 @@ Get Started with an exmaple
       [webservers]
       host1 ansible_host=107.22.141.4 ansible_user=ec2-user private_ip=172.16.170.190
       host2 ansible_host=54.146.162.192 ansible_user=ec2-user private_ip=172.16.160.13
-
-	.. note::
+	  
+   .. note::
     
-       The IP's in your environment will defer.
-	   
-	   The values from the inventory file will be used in subsequent playbooks
+      The IP's in your environment will defer.
+	  
+	  The values from the inventory file will be used in subsequent playbooks
 	
 4. Using your text editor of choice create a new file called bigip-facts.yml in the home directory ~/
 
@@ -203,4 +211,7 @@ Get Started with an exmaple
    ****************************************************************
    f5                         : ok=4    changed=1    unreachable=0    failed=0
    
+You have been successful in logging into the BIG-IP and grabbing/displaying facts. 
+Your access to the BIG-IP is verified.
+
 **Congratulations, your lab is up and running!**

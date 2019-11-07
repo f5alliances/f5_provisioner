@@ -6,8 +6,7 @@ One Time Setup
 
 Following needs to be installed on the **ansible_server_provioner**
 
-1. Install Python - latest version of Python (2.7 minimum) if you do not
-   already have it.
+1. Install Python - latest version of Python (2.7 minimum) if you do not already have it.
 
    -  http://www.python.org/
 
@@ -62,4 +61,4 @@ Following needs to be installed on the **ansible_server_provioner**
 
 5. Make sure you have subscribed to the right marketplace AMI (Amazon Machine Image).
 
-   -  F5 BIG-IP `Click here to subscribe.<https://aws.amazon.com/marketplace/pp/B079C44MFH/>`__
+   -  F5 BIG-IP `Click here to subscribe.<https://aws.amazon.com/marketplace/pp/B079C44MFH/>`_

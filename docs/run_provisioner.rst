@@ -1,7 +1,13 @@
 Run provisioner
 ===============
 
-Now you can start to provision a Lab Environment in AWS.
+Now you can start to provision the environment in AWS.
+
+Make sure you are in the correct directory after the git clone
+
+.. code::
+   
+   cd f5_provisioner/provisioner
 
 1. Configure f5_vars.yml to reflect your environment under provisioning.
 
@@ -44,10 +50,12 @@ Now you can start to provision a Lab Environment in AWS.
    .. code ::
 
       TESTWORKSHOP1-studentX-ansible
+|
 
-.. figure:: images/provisioner.gif
-   :alt: Provisioner
+.. image:: images/provisioner.gif
 
+|
+   
 .. note::
 
    Remember to tear down the lab when not is use by following

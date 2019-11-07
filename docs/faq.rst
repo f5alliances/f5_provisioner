@@ -1,7 +1,7 @@
 FAQ and troubleshooting
 ======================
 
-Q: Tasks being run by the provisioner?
+Q:Tasks being run by the provisioner?
 --------------------------------------
 
 The provision_lab.yml playbook creates a work bench for each
@@ -19,14 +19,15 @@ Q:What gets creatd on AWS
 - Creation of a AWS EC2 security group - Creation of a subnet for the VPC
 - Creation of an internet gateway for the VPC - Creation of route table for VPC (for reachability from internet)
 
-Q: What EC2 instances does provisioner spin up
+Q:What EC2 instances does provisioner spin up
 ----------------------------------------------
 
 - One ansible control node using a Centos image 
 - Two webservers using a Centos image 
 - One BIG-IP using the BEST license (pre-licensed)
 
-Q. What tasks does provisioner perfrom on the BIG-IP
+Q.What tasks does provisioner perfrom on the BIG-IP
+---------------------------------------------------
 
 - Changes the default MGMT password
 
@@ -49,7 +50,7 @@ OR
 
    pip install boto boto3
 
-Problem: Unable to locate credentials
+Problem:unable to locate credentials
 -------------------------------------
 
 .. code::
@@ -85,7 +86,7 @@ Problem: wrong version of Ansible
 
 Install 2.8 or later. 
 
-Problem: Wrong version of boto3
+Problem: wrong version of boto3
 -------------------------------
 
 .. code::
