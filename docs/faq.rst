@@ -11,7 +11,7 @@ instructor inventory file is also created in the current directory which
 will let the instructor access the nodes of any student. This file will
 be called ``instructor_inventory.txt``
 
-Q:What gets creatd on AWS 
+Q:What gets created on AWS 
 -------------------------
 
 - AWS VPC creation (Amazon Web Services Virtual Private Cloud) 
