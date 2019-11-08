@@ -59,4 +59,5 @@ Make sure you are in the correct directory after the git clone
 .. note::
 
    Remember to tear down the lab when not is use by following
+
    `ansible-playbook teardown_lab.yml -e @f5_vars.yml`, to avoid unexpected AWS charges!

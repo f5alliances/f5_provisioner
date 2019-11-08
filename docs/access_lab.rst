@@ -83,7 +83,7 @@ Get Started
     
       The IP's in your environment will defer.
 	  
-	  The values from the inventory file will be used in subsequent playbooks
+      The values from the inventory file will be used in subsequent playbooks
 	
 4. Using your text editor of choice create a new file called bigip-facts.yml in the home directory ~/
 

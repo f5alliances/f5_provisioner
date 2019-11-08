@@ -61,4 +61,4 @@ Following needs to be installed on the **ansible_server_provioner**
 
 5. Make sure you have subscribed to the right marketplace AMI (Amazon Machine Image).
 
-   -  F5 BIG-IP `Click here to subscribe.<https://aws.amazon.com/marketplace/pp/B079C44MFH/>`_
+   -  F5 BIG-IP `Click here to subscribe <https://aws.amazon.com/marketplace/pp/B079C44MFH/>`__
