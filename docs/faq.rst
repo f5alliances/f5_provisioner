@@ -31,6 +31,20 @@ Q.What tasks does provisioner perfrom on the BIG-IP
 
 - Changes the default MGMT password
 
+Problem: Provioner fails - SSH connectivity
+-------------------------------------------
+
+Provisioner fails at task **[Wait for all nodes to have SSH reachability]**
+
+**Solution**
+
+Make sure there is a private key of the form <<workshop_name>>-private.pem in folder f5_provisioner/provisioner/<<workshop_name>>/
+
+If ley is not present run the following: 
+
+- Teardown lab: ansible-playbook teardown_lab.yml -e @f5_vars.yml 
+- Provision again: ansible-playbook provision_lab.yml -e @f5_vars.yml 
+
 Problem: boto3 missing
 ----------------------
 
