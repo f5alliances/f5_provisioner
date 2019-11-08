@@ -10,7 +10,7 @@ With F5 Automation provisioner, users are provided with an **F5 + Ansible** sand
 - Ansible node 
 (More features will be added soon)
 
-![f5 diagram](images/f5topology.png)
+![f5 diagram](docs/images/f5topology.png)
 
 Once the necessary infrastructure is deployed using the provisioner, users will be able to try out various automation scenarios using the use-case templates in the [f5alliances repo](https://github.com/f5alliances).
 
