@@ -53,7 +53,7 @@ docker build --no-cache -t f5_sandbox_provisioner .
 1. Create an Amazon AWS account.
 
 2. Create an Access Key ID and Secret Access Key.  Save the ID and key for later.
-   - New to AWS and not sure what this step means?  [Click here](https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys)
+   - New to AWS and not sure what this step means?  [Click here](https://aws.amazon.com/premiumsupport/knowledge-center/create-access-key/)
 
 3. Make sure you have subscribed to the right marketplace AMI (Amazon Machine Image). 
    - You will need the F5 BIG-IP [Click here](https://aws.amazon.com/marketplace/pp/B079C44MFH/)
@@ -85,18 +85,30 @@ Now you can start to provision a Lab Environment in AWS.
 
 ```shell
 docker run \
--e AWS_ACCESS_KEY_ID \
--e AWS_SECRET_ACCESS_KEY \
+-e AWS_ACCESS_KEY_ID=ABCDEFGHIJKLMNOP \
+-e AWS_SECRET_ACCESS_KEY=ABCDEFGHIJKLMNOP/ABCDEFGHIJKLMNOP \
+-e @f5_vars.yml \
+f5_sandbox_provisioner ../provisioner/provision_lab.yml
+```
+
+This example passes AWS credentials as environment variables to the container. 
+Docker supports multiple methods to [accomplish this](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file).
+If the environment variable already exists, the ``-e VARIABLE`` construction prevents sensitive information from appearing in bash history.
+Alternatively, If using an [AWS CLI credential file](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) a mapped volume could be used.
+
+```shell
+docker run \
+-v ~/.aws/credentials:/root/.aws/credentials \
 -e @f5_vars.yml \
 f5_sandbox_provisioner ../provisioner/provision_lab.yml
 ```
 
 > :warning:
-> **If the provisioning is not successful**, please teardown the lab using command 
+> **If the provisioning is not successful**, please teardown the lab using a similar command ()
 ```shell
 docker run \
--e AWS_ACCESS_KEY_ID \
--e AWS_SECRET_ACCESS_KEY \
+-e AWS_ACCESS_KEY_ID=ABCDEFGHIJKLMNOP \
+-e AWS_SECRET_ACCESS_KEY=ABCDEFGHIJKLMNOP/ABCDEFGHIJKLMNOP \
 -e @f5_vars.yml \
 f5_sandbox_provisioner ../provisioner/teardown_lab.yml
 ```
@@ -106,10 +118,10 @@ f5_sandbox_provisioner ../provisioner/teardown_lab.yml
 
         `TESTWORKSHOP1-studentX-ansible`
 
-![Provisioner](../images/provisioner.gif)
+![Provisioner](../docs/images/provisioner.gif)
 
 > :warning: 
-> Remember to tear down the lab when not is use by following [TEAR DOWN LAB](#tear-down-lab), to avoid unexpected AWS charges!
+> Remember to tear down the lab when not is use by following [Tear Down Lab](#tear-down-lab), to avoid unexpected AWS charges!
 
 ## Access the Lab
 
@@ -311,8 +323,8 @@ To destroy all the EC2 instances after training is complete:
 
 ```shell
 docker run \
--e AWS_ACCESS_KEY_ID \
--e AWS_SECRET_ACCESS_KEY \
+-e AWS_ACCESS_KEY_ID=ABCDEFGHIJKLMNOP \
+-e AWS_SECRET_ACCESS_KEY=ABCDEFGHIJKLMNOP/ABCDEFGHIJKLMNOP \
 -e @f5_vars.yml \
 f5_sandbox_provisioner ../provisioner/teardown_lab.yml
 ```
