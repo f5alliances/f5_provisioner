@@ -11,5 +11,5 @@ student_total: 1
 admin_password: ansible
 
 # DO NOT CHANGE
-# workshp runs in F5 mode
+# workshop runs in F5 mode
 workshop_type: f5

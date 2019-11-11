@@ -45,7 +45,7 @@ This image will be used to run the ansible playbooks for the provisioner.
 From the directory containing the **Dockerfile**, run the build command.
 
 ```shell
-cd docker
+cd f5_provisioner/docker
 docker build --no-cache -t f5_sandbox_provisioner .
 ```
 
@@ -87,30 +87,30 @@ Now you can start to provision a Lab Environment in AWS.
 docker run \
 -e AWS_ACCESS_KEY_ID=ABCDEFGHIJKLMNOP \
 -e AWS_SECRET_ACCESS_KEY=ABCDEFGHIJKLMNOP/ABCDEFGHIJKLMNOP \
--e @f5_vars.yml \
-f5_sandbox_provisioner ../provisioner/provision_lab.yml
+-v $(pwd)/../provisioner:/ansible/playbooks \
+f5_sandbox_provisioner provision_lab.yml -e @f5_vars.yml
 ```
 
-This example passes AWS credentials as environment variables to the container. 
-Docker supports multiple methods to [accomplish this](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file).
+This example mounts the repository's ``provisioner`` directory inside the container (``-v``) and passes need variables and AWS credentials as environment variables (``-e``) to the container (the ``-e`` on the last line passes env variables to ansible itself). 
+Docker supports multiple methods to [pass environment variables to a container](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file).
 If the environment variable already exists, the ``-e VARIABLE`` construction prevents sensitive information from appearing in bash history.
 Alternatively, If using an [AWS CLI credential file](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) a mapped volume could be used.
 
 ```shell
 docker run \
 -v ~/.aws/credentials:/root/.aws/credentials \
--e @f5_vars.yml \
-f5_sandbox_provisioner ../provisioner/provision_lab.yml
+-v $(pwd)/../provisioner:/ansible/playbooks \
+f5_sandbox_provisioner provision_lab.yml -e @f5_vars.yml
 ```
 
 > :warning:
-> **If the provisioning is not successful**, please teardown the lab using a similar command ()
+> **If the provisioning is not successful**, please teardown the lab using a similar command (substitute proper environment variables)
 ```shell
 docker run \
 -e AWS_ACCESS_KEY_ID=ABCDEFGHIJKLMNOP \
 -e AWS_SECRET_ACCESS_KEY=ABCDEFGHIJKLMNOP/ABCDEFGHIJKLMNOP \
--e @f5_vars.yml \
-f5_sandbox_provisioner ../provisioner/teardown_lab.yml
+-v $(pwd)/../provisioner:/ansible/playbooks \
+f5_sandbox_provisioner teardown_lab.yml -e @f5_vars.yml
 ```
 >  and then run the provision playbook again (Step 2)
  
@@ -125,7 +125,7 @@ f5_sandbox_provisioner ../provisioner/teardown_lab.yml
 
 ## Access the Lab
 
-Workbench information is stored in a local directory named after the workshop (e.g. TESTWORKSHOP1/instructor_inventory.txt) after the provisioner is run and is succesful. Example:
+Workbench information is stored in a local directory named after the workshop (e.g. TESTWORKSHOP1/instructor_inventory.txt) after the provisioner is run and is successful. Example:
 
    ```handlebars
    [all:vars]
@@ -325,8 +325,8 @@ To destroy all the EC2 instances after training is complete:
 docker run \
 -e AWS_ACCESS_KEY_ID=ABCDEFGHIJKLMNOP \
 -e AWS_SECRET_ACCESS_KEY=ABCDEFGHIJKLMNOP/ABCDEFGHIJKLMNOP \
--e @f5_vars.yml \
-f5_sandbox_provisioner ../provisioner/teardown_lab.yml
+-v $(pwd)/../provisioner:/ansible/playbooks \
+f5_sandbox_provisioner teardown_lab.yml -e @f5_vars.yml
 ```
 
 # FAQ
