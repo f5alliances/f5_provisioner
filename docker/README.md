@@ -19,7 +19,7 @@
 
 # Pre-Requisites
 This provisioner is run using Ansible on AWS. To run the provisioner you will need the following
-- Docker Community Edition or above.
+- [Docker](https://docs.docker.com/install/) Community Edition or above
 - An account on [AWS](https://aws.amazon.com/)
 
 # Build Lab
@@ -33,15 +33,15 @@ Elsewhere in these instructions we will refer to the machine with the docker ins
 
 ### Clone the Repository
 
-Clone the workshops repo on the **docker_host**.
+Clone the workshop repository on the **docker_host**.
 
 ```
 git clone https://github.com/f5alliances/f5_provisioner.git
 ```
 ### Build the Container
 
-The [docker build](https://docs.docker.com/engine/reference/commandline/build/) command builds an image from a Dockerfile.
-This image will be used to run the ansible playbooks for the provisioner.
+The [docker build](https://docs.docker.com/engine/reference/commandline/build/) command builds an image from a **Dockerfile**.
+This image will be used to run the Ansible playbooks for the provisioner.
 From the directory containing the **Dockerfile**, run the build command.
 This command will take a few minutes to complete.
 
@@ -106,7 +106,7 @@ f5_sandbox_provisioner provision_lab.yml -e @f5_vars.yml
 ```
 
 > :warning:
-> **If the provisioning is not successful**, please teardown the lab using a similar command (substitute proper environment variable method).
+> **If the provisioning is not successful**, please teardown the lab by running the teardown playbook.
 ```shell
 docker run \
 -e AWS_ACCESS_KEY_ID=ABCDEFGHIJKLMNOP \
@@ -114,7 +114,8 @@ docker run \
 -v $(pwd)/../provisioner:/ansible/playbooks \
 f5_sandbox_provisioner teardown_lab.yml -e @f5_vars.yml
 ```
->  Correct the issue and run the provision playbook again (Step 2).
+> :warning:
+> Correct the issue and run the provision playbook again (Step 2).
  
 3. Login to the AWS EC2 console and you should see instances being created like:
 
@@ -333,7 +334,7 @@ f5_sandbox_provisioner teardown_lab.yml -e @f5_vars.yml
 
 # FAQ
 
-For frequently asked questions see the [FAQ](../docs/faq.md)
+For frequently asked questions see the [FAQ](../docs/faq.rst)
 
 # More Info On What Is Happening
 
