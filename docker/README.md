@@ -1,51 +1,35 @@
-# F5 Ansible AWS provisioner
+# F5 Ansible Docker Container
 
-# Table Of Contents
+# Table of Contents
 - [F5 Ansible AWS provisioner](#f5-ansible-aws-provisioner)
 - [Table Of Contents](#table-of-contents)
-- [PRE-REQUISITES](#pre-requisites)
-- [BUILD LAB](#build-lab)
+- [Pre-requisites](#pre-requisites)
+- [Build Lab](#build-lab)
   - [One Time Setup](#one-time-setup)
-    - [Install Ansible](#install-ansible)
+    - [Install Docker](#install-docker)
+    - [Build the Container](#build-the-container)
     - [AWS Setup](#aws-setup)
   - [Per workshop Setup](#per-workshop-setup)
   - [Access the Lab](#access-the-lab)
-  - [Get Started with an exmaple](#get-started-with-an-exmaple)
+  - [Get Started with an example](#get-started-with-an-exmaple)
 - [TEAR DOWN LAB](#tear-down-lab)
 - [FAQ](#faq)
 - [More info on what is happening](#more-info-on-what-is-happening)
 
-# PRE-REQUISITES
+# Pre-Requisites
 This provisioner is run using Ansible on AWS. To run the provisioner you will need the following
-- Server from where the provisioner will be executed installed with Ansible Engine v2.8.0 or higher. Let's give the server a name which we will refer in the rest of the document (**ansible_server_provisioner**)
+- Docker (more)
 - An account on [AWS](https://aws.amazon.com/)
 
-# BUILD LAB
+# Build Lab
 
 ## One Time Setup 
 
-Following needs to be installed on the **ansible_server_provisioner**
+The following steps using **docker** should be performed from the **docker_host**.
 
-### Install Ansible
-1. Install Python - latest version of Python (2.7 minimum) if you do not already have it.
-   - http://www.python.org/
+### Install Docker
 
-2. Install Ansible version 2.8.0 minimum:
-   - http://docs.ansible.com/ansible/latest/intro_installation.html
-
-If you run Ansible by using virtualenv/pip, please refer to [Install Ansible by using virtualenv](https://clouddocs.f5.com/products/orchestration/ansible/devel/usage/virtualenv.html).
-
-After installation run the following command to verify ansible installation
-
-```shell
-# ansible --version
-ansible 2.8.5
-  config file = None
-  configured module search path = ['/Users/test/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
-  ansible python module location = /Users/test/myansible/lib/python3.7/site-packages/ansible
-  executable location = /Users/test/myansible/bin/ansible
-  python version = 3.7.3 (default, Jun 19 2019, 07:40:11) [Clang 9.0.0 (clang-900.0.39.2)]
-```
+### Build the Container
 
 ### AWS Setup
 1. Create an Amazon AWS account.
@@ -53,23 +37,12 @@ ansible 2.8.5
 2. Create an Access Key ID and Secret Access Key.  Save the ID and key for later.
    - New to AWS and not sure what this step means?  [Click here](../docs/aws-directions/AWSHELP.md)
 
-3. Install `boto` and `boto3`as well as `netaddr` and `passlib` on the **ansible_server_provisioner**
-
-       pip install boto boto3 netaddr passlib
-
-4. Set your Access Key ID and Secret Access Key from Step 2 under ~/.aws/credentials in the **ansible_server_provisioner**
-
-       [root@centos ~]# cat ~/.aws/credentials
-       [default]
-       aws_access_key_id = ABCDEFGHIJKLMNOP
-       aws_secret_access_key = ABCDEFGHIJKLMNOP/ABCDEFGHIJKLMNOP
-
-5. Clone the workshops repo on the ansible_server_provisioner
+3. Clone the workshops repo on the ansible_server_provisioner
 
        git clone https://github.com/f5alliances/f5_provisioner.git
        cd f5_provisioner/provisioner
 
-6. Make sure you have subscribed to the right marketplace AMI (Amazon Machine Image). 
+4. Make sure you have subscribed to the right marketplace AMI (Amazon Machine Image). 
    - You will need the F5 BIG-IP [Click here](https://aws.amazon.com/marketplace/pp/B079C44MFH/)
 
 ## Per workshop Setup
@@ -336,5 +309,6 @@ What EC2 instances does it spin up?
 - Two webservers using a Centos image
 - One BIG-IP using the BEST license (pre-licensed)
 
-What tasks does it perfrom on the BIG-IP?
+What tasks does it perform on the BIG-IP?
 - Changes the default MGMT password
+
