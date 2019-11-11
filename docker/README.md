@@ -15,7 +15,7 @@
   - [Get Started with an example](#get-started-with-an-example)
 - [Tear Down Lab](#tear-down-lab)
 - [FAQ](#faq)
-- [More info on what is happening](#more-info-on-what-is-happening)
+- [More Info On What Is Happening](#more-info-on-what-is-happening)
 
 # Pre-Requisites
 This provisioner is run using Ansible on AWS. To run the provisioner you will need the following
@@ -43,6 +43,7 @@ git clone https://github.com/f5alliances/f5_provisioner.git
 The [docker build](https://docs.docker.com/engine/reference/commandline/build/) command builds an image from a Dockerfile.
 This image will be used to run the ansible playbooks for the provisioner.
 From the directory containing the **Dockerfile**, run the build command.
+This command will take a few minutes to complete.
 
 ```shell
 cd f5_provisioner/docker
@@ -90,11 +91,12 @@ docker run \
 -v $(pwd)/../provisioner:/ansible/playbooks \
 f5_sandbox_provisioner provision_lab.yml -e @f5_vars.yml
 ```
+This command will take several minutes to complete.
 
-This example mounts the repository's ``provisioner`` directory inside the container (``-v``) and passes need variables and AWS credentials as environment variables (``-e``) to the container (the ``-e`` on the last line passes env variables to ansible itself). 
+The command mounts the repository's ``provisioner`` directory inside the container (``-v``) and passes AWS credentials as environment variables (``-e``) to the container (the ``-e`` on the last line passes env variables to **ansible itself** and is not part of the docker command). 
 Docker supports multiple methods to [pass environment variables to a container](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file).
-If the environment variable already exists, the ``-e VARIABLE`` construction prevents sensitive information from appearing in bash history.
-Alternatively, If using an [AWS CLI credential file](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) a mapped volume could be used.
+If the environment variable already exists, the ``-e VARIABLE`` construction prevents sensitive information from appearing in bash history or the running proc.
+Alternatively, If using an [AWS CLI credential file](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) a mapped volume could be used. For example:
 
 ```shell
 docker run \
@@ -104,7 +106,7 @@ f5_sandbox_provisioner provision_lab.yml -e @f5_vars.yml
 ```
 
 > :warning:
-> **If the provisioning is not successful**, please teardown the lab using a similar command (substitute proper environment variables)
+> **If the provisioning is not successful**, please teardown the lab using a similar command (substitute proper environment variable method).
 ```shell
 docker run \
 -e AWS_ACCESS_KEY_ID=ABCDEFGHIJKLMNOP \
@@ -112,7 +114,7 @@ docker run \
 -v $(pwd)/../provisioner:/ansible/playbooks \
 f5_sandbox_provisioner teardown_lab.yml -e @f5_vars.yml
 ```
->  and then run the provision playbook again (Step 2)
+>  Correct the issue and run the provision playbook again (Step 2).
  
 3. Login to the AWS EC2 console and you should see instances being created like:
 
@@ -140,7 +142,7 @@ Workbench information is stored in a local directory named after the workshop (e
    
  - ssh to the ansible control node using studentx/ansible (x=studentID, example 1,2,3 etc.)
 
-## Get Started with an example
+## Get Started with an Example
 1. Login to Ansible control node using the studentID and the password mentioned in the f5_vars.yml earlier
 
 ```
@@ -313,7 +315,7 @@ f5                         : ok=4    changed=1    unreachable=0    failed=0
 
 Congratulations, your lab is up and running!
 
-# TEAR DOWN LAB
+# Tear Down Lab
 
 The `teardown_lab.yml` playbook deletes all the sandbox instances as well as local inventory files.
 
@@ -333,7 +335,7 @@ f5_sandbox_provisioner teardown_lab.yml -e @f5_vars.yml
 
 For frequently asked questions see the [FAQ](../docs/faq.md)
 
-# More info on what is happening
+# More Info On What Is Happening
 
 The `provision_lab.yml` playbook creates a work bench for each student, configures them for password authentication, and creates an inventory file for each user with their IP's and credentials. An instructor inventory file is also created in the current directory which will let the instructor access the nodes of any student.  This file will be called `instructor_inventory.txt`
 
