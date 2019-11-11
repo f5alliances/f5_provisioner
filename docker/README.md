@@ -1,75 +1,62 @@
-# F5 Ansible AWS provisioner
+# F5 Ansible Docker Container
 
-# Table Of Contents
+# Table of Contents
 - [F5 Ansible AWS provisioner](#f5-ansible-aws-provisioner)
 - [Table Of Contents](#table-of-contents)
-- [PRE-REQUISITES](#pre-requisites)
-- [BUILD LAB](#build-lab)
+- [Pre-requisites](#pre-requisites)
+- [Build Lab](#build-lab)
   - [One Time Setup](#one-time-setup)
-    - [Install Ansible](#install-ansible)
+    - [Install Docker](#install-docker)
+    - [Clone the Repository](#clone-the-repository)
+    - [Build the Container](#build-the-container)
     - [AWS Setup](#aws-setup)
   - [Per workshop Setup](#per-workshop-setup)
   - [Access the Lab](#access-the-lab)
-  - [Get Started with an exmaple](#get-started-with-an-exmaple)
-- [TEAR DOWN LAB](#tear-down-lab)
+  - [Get Started with an example](#get-started-with-an-example)
+- [Tear Down Lab](#tear-down-lab)
 - [FAQ](#faq)
-- [More info on what is happening](#more-info-on-what-is-happening)
+- [More Info On What Is Happening](#more-info-on-what-is-happening)
 
-# PRE-REQUISITES
+# Pre-Requisites
 This provisioner is run using Ansible on AWS. To run the provisioner you will need the following
-- Server from where the provisioner will be executed installed with Ansible Engine v2.8.0 or higher. Let's give the server a name which we will refer in the rest of the document (**ansible_server_provisioner**)
+- [Docker](https://docs.docker.com/install/) Community Edition or above
 - An account on [AWS](https://aws.amazon.com/)
 
-# BUILD LAB
+# Build Lab
 
 ## One Time Setup 
 
-Following needs to be installed on the **ansible_server_provisioner**
+### Install Docker
 
-### Install Ansible
-1. Install Python - latest version of Python (2.7 minimum) if you do not already have it.
-   - http://www.python.org/
+Using your local machine or a dedicated host, install [Docker](https://docs.docker.com/install/).
+Elsewhere in these instructions we will refer to the machine with the docker installation as **docker_host**.
 
-2. Install Ansible version 2.8.0 minimum:
-   - http://docs.ansible.com/ansible/latest/intro_installation.html
+### Clone the Repository
 
-If you run Ansible by using virtualenv/pip, please refer to [Install Ansible by using virtualenv](https://clouddocs.f5.com/products/orchestration/ansible/devel/usage/virtualenv.html).
+Clone the workshop repository on the **docker_host**.
 
-After installation run the following command to verify ansible installation
+```
+git clone https://github.com/f5alliances/f5_provisioner.git
+```
+### Build the Container
+
+The [docker build](https://docs.docker.com/engine/reference/commandline/build/) command builds an image from a **Dockerfile**.
+This image will be used to run the Ansible playbooks for the provisioner.
+From the directory containing the **Dockerfile**, run the build command.
+This command will take a few minutes to complete.
 
 ```shell
-# ansible --version
-ansible 2.8.5
-  config file = None
-  configured module search path = ['/Users/test/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
-  ansible python module location = /Users/test/myansible/lib/python3.7/site-packages/ansible
-  executable location = /Users/test/myansible/bin/ansible
-  python version = 3.7.3 (default, Jun 19 2019, 07:40:11) [Clang 9.0.0 (clang-900.0.39.2)]
+cd f5_provisioner/docker
+docker build --no-cache -t f5_sandbox_provisioner .
 ```
 
 ### AWS Setup
 1. Create an Amazon AWS account.
 
 2. Create an Access Key ID and Secret Access Key.  Save the ID and key for later.
-   - New to AWS and not sure what this step means?  [Click here](../docs/aws-directions/AWSHELP.md)
+   - New to AWS and not sure what this step means?  [Click here](https://aws.amazon.com/premiumsupport/knowledge-center/create-access-key/)
 
-3. Install `boto` and `boto3`as well as `netaddr` and `passlib` on the **ansible_server_provisioner**
-
-       pip install boto boto3 netaddr passlib
-
-4. Set your Access Key ID and Secret Access Key from Step 2 under ~/.aws/credentials in the **ansible_server_provisioner**
-
-       [root@centos ~]# cat ~/.aws/credentials
-       [default]
-       aws_access_key_id = ABCDEFGHIJKLMNOP
-       aws_secret_access_key = ABCDEFGHIJKLMNOP/ABCDEFGHIJKLMNOP
-
-5. Clone the workshops repo on the ansible_server_provisioner
-
-       git clone https://github.com/f5alliances/f5_provisioner.git
-       cd f5_provisioner/provisioner
-
-6. Make sure you have subscribed to the right marketplace AMI (Amazon Machine Image). 
+3. Make sure you have subscribed to the right marketplace AMI (Amazon Machine Image). 
    - You will need the F5 BIG-IP [Click here](https://aws.amazon.com/marketplace/pp/B079C44MFH/)
 
 ## Per workshop Setup
@@ -91,31 +78,57 @@ Now you can start to provision a Lab Environment in AWS.
    admin_password: ansible
 
    # DO NOT CHANGE
-   # workshp runs in F5 mode
+   # workshop runs in F5 mode
    workshop_type: f5
 ```
 
-2. Run the playbook:
+2. Run the playbook from the container:
 
-       ansible-playbook provision_lab.yml -e @f5_vars.yml
+```shell
+docker run \
+-e AWS_ACCESS_KEY_ID=ABCDEFGHIJKLMNOP \
+-e AWS_SECRET_ACCESS_KEY=ABCDEFGHIJKLMNOP/ABCDEFGHIJKLMNOP \
+-v $(pwd)/../provisioner:/ansible/playbooks \
+f5_sandbox_provisioner provision_lab.yml -e @f5_vars.yml
+```
+This command will take several minutes to complete.
+
+The command mounts the repository's ``provisioner`` directory inside the container (``-v``) and passes AWS credentials as environment variables (``-e``) to the container (the ``-e`` on the last line passes env variables to **ansible itself** and is not part of the docker command). 
+Docker supports multiple methods to [pass environment variables to a container](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file).
+If the environment variable already exists, the ``-e VARIABLE`` construction prevents sensitive information from appearing in bash history or the running proc.
+Alternatively, If using an [AWS CLI credential file](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) a mapped volume could be used. For example:
+
+```shell
+docker run \
+-v ~/.aws/credentials:/root/.aws/credentials \
+-v $(pwd)/../provisioner:/ansible/playbooks \
+f5_sandbox_provisioner provision_lab.yml -e @f5_vars.yml
+```
 
 > :warning:
-> **If the provisioning is not successful**, please teardown the lab using command 
-> `ansible-playbook teardown_lab.yml -e @f5_vars.yml` 
->  and then run the provision playbook again (Step 2)
+> **If the provisioning is not successful**, please teardown the lab by running the teardown playbook.
+```shell
+docker run \
+-e AWS_ACCESS_KEY_ID=ABCDEFGHIJKLMNOP \
+-e AWS_SECRET_ACCESS_KEY=ABCDEFGHIJKLMNOP/ABCDEFGHIJKLMNOP \
+-v $(pwd)/../provisioner:/ansible/playbooks \
+f5_sandbox_provisioner teardown_lab.yml -e @f5_vars.yml
+```
+> :warning:
+> Correct the issue and run the provision playbook again (Step 2).
  
 3. Login to the AWS EC2 console and you should see instances being created like:
 
         `TESTWORKSHOP1-studentX-ansible`
 
-![Provisioner](../images/provisioner.gif)
+![Provisioner](../docs/images/provisioner.gif)
 
 > :warning: 
-> Remember to tear down the lab when not is use by following [TEAR DOWN LAB](#tear-down-lab), to avoid unexpected AWS charges!
+> Remember to tear down the lab when not is use by following [Tear Down Lab](#tear-down-lab), to avoid unexpected AWS charges!
 
 ## Access the Lab
 
-Workbench information is stored in a local directory named after the workshop (e.g. TESTWORKSHOP1/instructor_inventory.txt) after the provisioner is run and is succesful. Example:
+Workbench information is stored in a local directory named after the workshop (e.g. TESTWORKSHOP1/instructor_inventory.txt) after the provisioner is run and is successful. Example:
 
    ```handlebars
    [all:vars]
@@ -130,7 +143,7 @@ Workbench information is stored in a local directory named after the workshop (e
    
  - ssh to the ansible control node using studentx/ansible (x=studentID, example 1,2,3 etc.)
 
-## Get Started with an example
+## Get Started with an Example
 1. Login to Ansible control node using the studentID and the password mentioned in the f5_vars.yml earlier
 
 ```
@@ -303,23 +316,27 @@ f5                         : ok=4    changed=1    unreachable=0    failed=0
 
 Congratulations, your lab is up and running!
 
-# TEAR DOWN LAB
+# Tear Down Lab
 
 The `teardown_lab.yml` playbook deletes all the sandbox instances as well as local inventory files.
 
 To destroy all the EC2 instances after training is complete:
 
-1. Run the playbook:
+1. Run the playbook from the container:
 
 ```shell
-        ansible-playbook teardown_lab.yml -e @f5_vars.yml
+docker run \
+-e AWS_ACCESS_KEY_ID=ABCDEFGHIJKLMNOP \
+-e AWS_SECRET_ACCESS_KEY=ABCDEFGHIJKLMNOP/ABCDEFGHIJKLMNOP \
+-v $(pwd)/../provisioner:/ansible/playbooks \
+f5_sandbox_provisioner teardown_lab.yml -e @f5_vars.yml
 ```
 
 # FAQ
 
-For frequently asked questions see the [FAQ](../docs/faq.md)
+For frequently asked questions see the [FAQ](../docs/faq.rst)
 
-# More info on what is happening
+# More Info On What Is Happening
 
 The `provision_lab.yml` playbook creates a work bench for each student, configures them for password authentication, and creates an inventory file for each user with their IP's and credentials. An instructor inventory file is also created in the current directory which will let the instructor access the nodes of any student.  This file will be called `instructor_inventory.txt`
 
@@ -336,5 +353,6 @@ What EC2 instances does it spin up?
 - Two webservers using a Centos image
 - One BIG-IP using the BEST license (pre-licensed)
 
-What tasks does it perfrom on the BIG-IP?
+What tasks does it perform on the BIG-IP?
 - Changes the default MGMT password
+

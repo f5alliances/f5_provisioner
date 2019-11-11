@@ -4,7 +4,7 @@ Build environment
 One Time Setup
 --------------
 
-Following needs to be installed on the **ansible_server_provioner**
+Following needs to be installed on the **ansible_server_provisioner**
 
 1. Install Python - latest version of Python (2.7 minimum) if you do not already have it.
 
@@ -14,7 +14,7 @@ Following needs to be installed on the **ansible_server_provioner**
 
    -  http://docs.ansible.com/ansible/latest/intro_installation.html
 
-   If you run Ansible by using virtualenv/pip, please refer to `Install snsible by using
+   If you run Ansible by using virtualenv/pip, please refer to `Install ansible by using
    virtualenv <https://clouddocs.f5.com/products/orchestration/ansible/devel/usage/virtualenv.html>`__.
 
    After installation run the following command to verify ansible installation
