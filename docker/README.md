@@ -7,42 +7,55 @@
 - [Build Lab](#build-lab)
   - [One Time Setup](#one-time-setup)
     - [Install Docker](#install-docker)
+    - [Clone the Repository](#clone-the-repository)
     - [Build the Container](#build-the-container)
     - [AWS Setup](#aws-setup)
   - [Per workshop Setup](#per-workshop-setup)
   - [Access the Lab](#access-the-lab)
-  - [Get Started with an example](#get-started-with-an-exmaple)
-- [TEAR DOWN LAB](#tear-down-lab)
+  - [Get Started with an example](#get-started-with-an-example)
+- [Tear Down Lab](#tear-down-lab)
 - [FAQ](#faq)
 - [More info on what is happening](#more-info-on-what-is-happening)
 
 # Pre-Requisites
 This provisioner is run using Ansible on AWS. To run the provisioner you will need the following
-- Docker (more)
+- Docker Community Edition or above.
 - An account on [AWS](https://aws.amazon.com/)
 
 # Build Lab
 
 ## One Time Setup 
 
-The following steps using **docker** should be performed from the **docker_host**.
-
 ### Install Docker
 
+Using your local machine or a dedicated host, install [Docker](https://docs.docker.com/install/).
+Elsewhere in these instructions we will refer to the machine with the docker installation as **docker_host**.
+
+### Clone the Repository
+
+Clone the workshops repo on the **docker_host**.
+
+```
+git clone https://github.com/f5alliances/f5_provisioner.git
+```
 ### Build the Container
+
+The [docker build](https://docs.docker.com/engine/reference/commandline/build/) command builds an image from a Dockerfile.
+This image will be used to run the ansible playbooks for the provisioner.
+From the directory containing the **Dockerfile**, run the build command.
+
+```shell
+cd docker
+docker build --no-cache -t f5_sandbox_provisioner .
+```
 
 ### AWS Setup
 1. Create an Amazon AWS account.
 
 2. Create an Access Key ID and Secret Access Key.  Save the ID and key for later.
-   - New to AWS and not sure what this step means?  [Click here](../docs/aws-directions/AWSHELP.md)
+   - New to AWS and not sure what this step means?  [Click here](https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys)
 
-3. Clone the workshops repo on the ansible_server_provisioner
-
-       git clone https://github.com/f5alliances/f5_provisioner.git
-       cd f5_provisioner/provisioner
-
-4. Make sure you have subscribed to the right marketplace AMI (Amazon Machine Image). 
+3. Make sure you have subscribed to the right marketplace AMI (Amazon Machine Image). 
    - You will need the F5 BIG-IP [Click here](https://aws.amazon.com/marketplace/pp/B079C44MFH/)
 
 ## Per workshop Setup
@@ -64,17 +77,29 @@ Now you can start to provision a Lab Environment in AWS.
    admin_password: ansible
 
    # DO NOT CHANGE
-   # workshp runs in F5 mode
+   # workshop runs in F5 mode
    workshop_type: f5
 ```
 
-2. Run the playbook:
+2. Run the playbook from the container:
 
-       ansible-playbook provision_lab.yml -e @f5_vars.yml
+```shell
+docker run \
+-e AWS_ACCESS_KEY_ID \
+-e AWS_SECRET_ACCESS_KEY \
+-e @f5_vars.yml \
+f5_sandbox_provisioner ../provisioner/provision_lab.yml
+```
 
 > :warning:
 > **If the provisioning is not successful**, please teardown the lab using command 
-> `ansible-playbook teardown_lab.yml -e @f5_vars.yml` 
+```shell
+docker run \
+-e AWS_ACCESS_KEY_ID \
+-e AWS_SECRET_ACCESS_KEY \
+-e @f5_vars.yml \
+f5_sandbox_provisioner ../provisioner/teardown_lab.yml
+```
 >  and then run the provision playbook again (Step 2)
  
 3. Login to the AWS EC2 console and you should see instances being created like:
@@ -282,10 +307,14 @@ The `teardown_lab.yml` playbook deletes all the sandbox instances as well as loc
 
 To destroy all the EC2 instances after training is complete:
 
-1. Run the playbook:
+1. Run the playbook from the container:
 
 ```shell
-        ansible-playbook teardown_lab.yml -e @f5_vars.yml
+docker run \
+-e AWS_ACCESS_KEY_ID \
+-e AWS_SECRET_ACCESS_KEY \
+-e @f5_vars.yml \
+f5_sandbox_provisioner ../provisioner/teardown_lab.yml
 ```
 
 # FAQ
