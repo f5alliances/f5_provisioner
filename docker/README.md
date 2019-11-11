@@ -1,9 +1,9 @@
 # F5 Ansible Docker Container
 
 # Table of Contents
-- [F5 Ansible AWS provisioner](#f5-ansible-aws-provisioner)
-- [Table Of Contents](#table-of-contents)
-- [Pre-requisites](#pre-requisites)
+- [F5 Ansible Docker Container](#f5-ansible-docker-container)
+- [Table of Contents](#table-of-contents)
+- [Pre-Requisites](#pre-requisites)
 - [Build Lab](#build-lab)
   - [One Time Setup](#one-time-setup)
     - [Install Docker](#install-docker)
@@ -12,7 +12,7 @@
     - [AWS Setup](#aws-setup)
   - [Per workshop Setup](#per-workshop-setup)
   - [Access the Lab](#access-the-lab)
-  - [Get Started with an example](#get-started-with-an-example)
+  - [Get Started with an Example](#get-started-with-an-example)
 - [Tear Down Lab](#tear-down-lab)
 - [FAQ](#faq)
 - [More Info On What Is Happening](#more-info-on-what-is-happening)
@@ -120,8 +120,6 @@ f5_sandbox_provisioner teardown_lab.yml -e @f5_vars.yml
 3. Login to the AWS EC2 console and you should see instances being created like:
 
         `TESTWORKSHOP1-studentX-ansible`
-
-![Provisioner](../docs/images/provisioner.gif)
 
 > :warning: 
 > Remember to tear down the lab when not is use by following [Tear Down Lab](#tear-down-lab), to avoid unexpected AWS charges!
