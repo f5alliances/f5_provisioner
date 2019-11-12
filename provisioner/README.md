@@ -10,10 +10,12 @@
     - [AWS Setup](#aws-setup)
   - [Per workshop Setup](#per-workshop-setup)
   - [Access the Lab](#access-the-lab)
-  - [Get Started with an exmaple](#get-started-with-an-exmaple)
+  - [Get Started with an example](#get-started-with-an-example)
 - [TEAR DOWN LAB](#tear-down-lab)
 - [FAQ](#faq)
 - [More info on what is happening](#more-info-on-what-is-happening)
+
+This provisioner is running through Ansible server. You may choose to install Ansible right on top of the operating system layer, or deploy Ansible inside a standalone Docker image. If you prefer Docker approach, please follow [F5 Ansible Docker Container](../docker/README.md).
 
 # PRE-REQUISITES
 This provisioner is run using Ansible on AWS. To run the provisioner you will need the following
