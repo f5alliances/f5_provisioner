@@ -20,6 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = u'F5 provisioner'
+#copyright = u'2019, Eric Ji, Payal Singh, Matt Mabis'
 author = u'Eric Ji, Payal Singh, Matt Mabis'
 
 # The short X.Y version
@@ -127,7 +128,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'F5provisioner.tex', u'F5 provisioner Documentation', 'manual'),
+    (master_doc, 'F5provisioner.tex', u'F5 provisioner Documentation',
+     u'Eric Ji, Payal Singh, Matt Mabis', 'manual'),
 ]
 
 
@@ -136,7 +138,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'f5provisioner', u'F5 provisioner Documentation', 1)
+    (master_doc, 'f5provisioner', u'F5 provisioner Documentation',
+     [author], 1)
 ]
 
 
@@ -147,7 +150,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'F5provisioner', u'F5 provisioner Documentation',
-     'F5provisioner', 'One line description of project.',
+     author, 'F5provisioner', 'One line description of project.',
      'Miscellaneous'),
 ]
 
