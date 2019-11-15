@@ -20,7 +20,6 @@
 # -- Project information -----------------------------------------------------
 
 project = u'F5 provisioner'
-copyright = u'2019, Eric Ji, Payal Singh, Matt Mabis'
 author = u'Eric Ji, Payal Singh, Matt Mabis'
 
 # The short X.Y version
