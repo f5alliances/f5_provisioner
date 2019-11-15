@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = u'F5 provisioner'
-#author = u'Eric Ji, Payal Singh, Matt Mabis'
+author = u'Eric Ji, Payal Singh, Matt Mabis'
 
 # The short X.Y version
 version = u''
