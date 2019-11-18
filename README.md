@@ -20,7 +20,7 @@ The Automation Sandbox can be used:
 - to find automation solutions for common customer use-cases.
 
 ## How to use?
-Follow [F5 Ansible AWS Provisioner](https://f5-provisioner.readthedocs.io/en/latest/) for detailed steps to spin up and tear down the sandbox infrastructure using provisioner
+Follow [F5 Ansible AWS Provisioner](https://github.com/f5alliances/f5_provisioner/blob/master/provisioner/README.md) for detailed steps to spin up and tear down the sandbox infrastructure using provisioner
 
 ## Support
 This project is a community effort to promote Network and Security automation and is maintained by F5 BD. For any feature requests or issues, feel free to open an [issue](https://github.com/f5alliances/f5_provisioner/issues) and we will give our best effort to address it.
