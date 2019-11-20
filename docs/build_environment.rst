@@ -6,7 +6,7 @@ One Time Setup
 
 **Install docker**
 
-Using your local machine or a dedicated host, install [Docker](https://docs.docker.com/install/).
+Using your local machine or a dedicated host, install `Docker <https://docs.docker.com/install/>`_.
 Elsewhere in these instructions we will refer to the machine with the docker installation as **docker_host**.
 
 **Clone the Repo**
@@ -19,7 +19,7 @@ Clone the workshop repository on the **docker_host**.
 
 **Build the container**
 
-The `docker build<https://docs.docker.com/engine/reference/commandline/build/>`_ command builds an image from a **Dockerfile**.
+The `docker build <https://docs.docker.com/engine/reference/commandline/build/>`_ command builds an image from a **Dockerfile**.
 This image will be used to run the Ansible playbooks for the provisioner.
 From the directory containing the **Dockerfile**, run the build command.
 This command will take a few minutes to complete.
@@ -121,18 +121,6 @@ Now you can start to provision the environment in AWS.
 
       TESTWORKSHOP1-studentX-ansible
 
-.. note::
-
-   Remember to tear down the lab when not is use
- 
-   .. code::
-
-      docker run \
-      -e AWS_ACCESS_KEY_ID=ABCDEFGHIJKLMNOP \
-      -e AWS_SECRET_ACCESS_KEY=ABCDEFGHIJKLMNOP/ABCDEFGHIJKLMNOP \
-      -v $(pwd)/../provisioner:/ansible/playbooks \
-       f5_sandbox_provisioner teardown_lab.yml -e @f5_vars.yml
-       
 Access the Lab
 --------------
 
@@ -160,9 +148,6 @@ Example: Make sure to go to the provisioner directoy
 
    If there are more students configured there will be more entries to represent each student
    
-Get Started 
-```````````
-
 1. Login to Ansible control node (IP from inventory file above) using the studentID and the password
    mentioned in the f5_vars.yml earlier
 
