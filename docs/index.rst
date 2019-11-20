@@ -11,9 +11,6 @@ This provisioner is run using Ansible on AWS. To run the provisioner you will ne
 
 This provisioner is run using Ansible on AWS. To run the provisioner you will need the following 
 
-Let’s give the server/machine a name from where the provisioner will be executed and which we will refer in the rest of the document
-- **ansible_server_provisioner**
-
 .. toctree::
    :glob:
    :maxdepth: 2
