@@ -1,12 +1,11 @@
 Access the Lab
 ==============
 
-Once the provisioner has run successfully and infrasture has been spun up.
+Once the provisioner has run successfully and infrastructure has been spun up.
 
-All the workbench information is stored in a local directory named after the workshop (e.g. TESTWORKSHOP1/instructor_inventory.txt) after the
-provisioner is run and is succesful. 
+All the workbench information is stored in a local directory named after the workshop (e.g. TESTWORKSHOP1/instructor_inventory.txt) after the provisioner is run and is succesful. 
 
-Example:
+Example: Make sure to go to the provisioner directoy
 
 .. code::
 
