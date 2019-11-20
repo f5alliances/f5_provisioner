@@ -87,13 +87,11 @@ Make sure you are in the correct directory after the git clone
 
    This command will take several minutes to complete.
 
-   The command mounts the repository's ``provisioner`` directory inside the container (``-v``) and passes AWS credentials as environment    variables (``-e``) to the container (the ``-e`` on the last line passes env variables to **ansible itself** and is not part of the      docker command). 
-   Docker supports multiple methods to `pass environment variables to a 
-   container<https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file>`_
-   If the environment variable already exists, the ``-e VARIABLE`` construction prevents sensitive information from appearing in bash 
+   - The command mounts the repository's ``provisioner`` directory inside the container (``-v``) and passes AWS credentials as environment    variables (``-e``) to the container (the ``-e`` on the last line passes env variables to **ansible itself** and is not part of the      docker command). 
+   - Docker supports multiple methods to `pass environment variables to a container <https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file>`_
+   - If the environment variable already exists, the ``-e VARIABLE`` construction prevents sensitive information from appearing in bash 
    history or the running proc.
-   Alternatively, If using an `AWS CLI credential file<https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html>`_ a   
-   mapped volume could be used. For example:
+   - Alternatively, If using an `AWS CLI credential file <https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html>`_ a mapped volume could be used. For example:
 
    .. code::
       
@@ -114,7 +112,7 @@ Make sure you are in the correct directory after the git clone
       -v $(pwd)/../provisioner:/ansible/playbooks \
        f5_sandbox_provisioner teardown_lab.yml -e @f5_vars.yml
 
-   ..note::
+   .. note::
 
      Correct the issue and run the provision playbook again (Step 2).
 
