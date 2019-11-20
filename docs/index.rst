@@ -9,8 +9,6 @@ This provisioner is run using Ansible on AWS. To run the provisioner you will ne
 - `Docker <https://docs.docker.com/install>`_ Community Edition
 - An account on `AWS <https://aws.amazon.com/>`__
 
-This provisioner is run using Ansible on AWS. To run the provisioner you will need the following 
-
 .. toctree::
    :glob:
    :maxdepth: 2
