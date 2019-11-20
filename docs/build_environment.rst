@@ -120,12 +120,7 @@ Make sure you are in the correct directory after the git clone
    .. code ::
 
       TESTWORKSHOP1-studentX-ansible
-|
 
-.. image:: images/provisioner.gif
-
-|
-   
 .. note::
 
    Remember to tear down the lab when not is use
