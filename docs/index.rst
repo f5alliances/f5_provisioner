@@ -4,12 +4,15 @@ F5 Ansible AWS provisioner
 Prerequisites
 -------------
 
+This provisioner is run using Ansible on AWS. To run the provisioner you will need the following
+
+- `Docker <https://docs.docker.com/install>`_ Community Edition
+- An account on `AWS <https://aws.amazon.com/>`__
+
 This provisioner is run using Ansible on AWS. To run the provisioner you will need the following 
 
-- Server from where the provisioner will be executed installed with Ansible Engine v2.8.0 or higher. Let’s give the
-  server a name which we will refer in the rest of the document (**ansible_server_provisioner**) 
-
-- An account on `AWS <https://aws.amazon.com/>`__
+Let’s give the server/machine a name from where the provisioner will be executed and which we will refer in the rest of the document
+- **ansible_server_provisioner**
 
 .. toctree::
    :glob:
