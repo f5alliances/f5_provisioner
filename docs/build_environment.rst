@@ -42,7 +42,7 @@ Run provisioner
 
 Now you can start to provision the environment in AWS.
 
-Make sure you are in the correct directory after the git clone
+**Make sure you move to the correct directory after the git clone and building the container above**
 
 .. code::
    
